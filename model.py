@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 
 from flask.ext.login import UserMixin
 
-engine = create_engine(config.DB_URI, echo=False) 
+engine = create_engine(config.DB_URI, echo=False)
 session = scoped_session(sessionmaker(bind=engine,
                          autocommit = False,
                          autoflush = False))
@@ -19,7 +19,7 @@ Base = declarative_base()
 Base.query = session.query_property()
 
 class User(Base, UserMixin):
-    __tablename__ = "users" 
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
@@ -38,7 +38,7 @@ class User(Base, UserMixin):
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id = Column(Integer, primary_key=True)
     title = Column(String(64), nullable=False)
     body = Column(Text, nullable=False)
@@ -54,7 +54,7 @@ def create_tables():
     u = User(email="test@test.com")
     u.set_password("unicorn")
     session.add(u)
-    p = Post(title="This is a test post", body="This is the body of a test post.")
+    p = Post(title="This is a test post", body="This is     the body of a test post.")
     u.posts.append(p)
     session.commit()
 
