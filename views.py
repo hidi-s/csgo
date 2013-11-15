@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, g, session, url_for, flash
 from model import User, Post
 from flask.ext.login import LoginManager, login_required, login_user, current_user
-from flaskext.markdown import Markdown
+from flask.ext.markdown import Markdown
 import config
 import forms
 import model
@@ -25,7 +25,9 @@ Markdown(app)
 
 @app.route("/")
 def index():
+    # testvar = request.args.get("arg", "empty")
     posts = Post.query.all()
+    # print testvar   
     return render_template("index.html", posts=posts)
 
 @app.route("/post/<int:id>")
@@ -77,6 +79,44 @@ def authenticate():
     login_user(user)
     return redirect(request.args.get("next", url_for("index")))
 
+@app.route("/about")
+def view_about():
+    return render_template("about.html")
+
+@app.route("/browse")
+def browse():
+    return render_template("browse.html")
+
+@app.route("/create_profile")
+def create_profile():
+    return render_template("create_profile.html")
+
+@app.route("/create_profile", methods=["POST"])
+def post_create_profile():
+    password = request.form.get("password")
+    email = request.form.get("email")
+     # def add_user(email, password):
+    new_user = User(email=email)
+    new_user.set_password(password=password)
+    model.session.add(new_user)
+    model.session.commit()
+    print password
+    print email
+    return redirect(url_for("index"))
+
+@app.route("/create_info")
+def create_info():
+    return render_template("create_info.html")
+
+@app.route("/create_info", methods=["POST"])
+def post_create_info():
+    age = request.form.get("age")
+    description = request.form.get("description")
+    program = request.form.get("program")
+    print age
+    print description 
+    print program 
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
