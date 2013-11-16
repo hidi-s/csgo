@@ -18,33 +18,17 @@ session = scoped_session(sessionmaker(bind=engine,
 Base = declarative_base()
 Base.query = session.query_property()
 
-# Validation lives here. The user table contains email and password info. 
+# Validation lives here. The user table contains email and password info.
 class User(Base, UserMixin):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
     salt = Column(String(64), nullable=False)
-    # new_column = Column(String(64), nullable=True)
-    # first_name = Column(String(16), nullable=True)
-    # last_name = Column(String(24), nullable=True)
-    # age = Column(Integer, nullable=True)
-    # location = Column(String(24), nullable=True)
-    # tagline = Column(String(128), nullable=True)
-    # profile_description = Column(String(1024), nullable=True)
-    # program_type = Column(String(128), nullable=True)
-    # program = Column(String(128), nullable=True)
-    # program_cost = Column(Integer, nullable=True)
-    # interests = Column(String(128), nullable=True)
-    # aspirations = Column(String(128), nullable=True)
-    # twitter = Column(String(128), nullable=True)
-    # github = Column(String(128), nullable=True)    
-    # fb_link = Column(String(128), nullable=True)
-    # linkedin = Column(String(128), nullable=True)
-    # created_at = Column(DateTime, nullable=True, default=datetime.now)
-    # status = Column(String(128), nullable=True)
+    salt2 = Column(String(64), nullable=True)
 
     posts = relationship("Post", uselist=True)
+    profile = relationship("Profile", uselist=True)
 
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -55,19 +39,33 @@ class User(Base, UserMixin):
         password = password.encode("utf-8")
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
+# The user profile lives here. Eventually I may want to break out the program info and followers/funders to a different table.
+class Profile(Base):
+    __tablename__ = "profile"
 
-# class Followers(Base):
-#     __tablename__ = "supporters"
-#     # The supporter id is the id for the supporter.
-#     id = Column(Integer, primary_key=True)
-#     # The student id is the id for the student. 
-#     student_id = Column(Integer, nullable=False)
-#     user_id = Column(Integer, ForeignKey("users.id"))
-#     user = relationship("User")
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(16), nullable=True)
+    last_name = Column(String(24), nullable=True)
+    age = Column(Integer, nullable=True)
+    location = Column(String(24), nullable=True)
+    tagline = Column(String(128), nullable=True)
+    profile_description = Column(String(1024), nullable=True)
+    program_type = Column(String(128), nullable=True)
+    program = Column(String(128), nullable=True)
+    program_cost = Column(Integer, nullable=True)
+    interests = Column(String(128), nullable=True)
+    aspirations = Column(String(128), nullable=True)
+    twitter = Column(String(128))
+    github = Column(String(128))
+    fb_link = Column(String(128))
+    linkedin = Column(String(128))
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    user_id = Column(Integer, ForeignKey("users.id"))
 
+    user = relationship("User")
 
-# Once I break out my tables further I will put them here. 
-# class Program(Base): 
+# Once I break out my tables further I will put them here.
+# class Program(Base):
 # class Status(Base):
 
 class Post(Base):
@@ -84,6 +82,7 @@ class Post(Base):
 
 
 def create_tables():
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")
@@ -101,3 +100,4 @@ def create_tables():
 
 if __name__ == "__main__":
     create_tables()
+

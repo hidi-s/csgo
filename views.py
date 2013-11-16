@@ -110,7 +110,7 @@ def post_create_profile():
 
 # @app.route("/create_info", methods=["POST"])
 # def post_create_info():
-#     user_id = session.get('user_id')
+#     user_id = ses sion.get('user_id')
 #     email = session.get('email')
 #     print user_id
 #     age = request.form.get("age")
