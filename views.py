@@ -93,30 +93,36 @@ def create_profile():
 
 @app.route("/create_profile", methods=["POST"])
 def post_create_profile():
-    password = request.form.get("password")
-    email = request.form.get("email")
-     # def add_user(email, password):
-    new_user = User(email=email)
-    new_user.set_password(password=password)
-    model.session.add(new_user)
-    model.session.commit()
-    print password
-    print email
+    # password = request.form.get("password")
+    # email = request.form.get("email")
+    #  # def add_user(email, password):
+    # new_user = User(email=email)
+    # new_user.set_password(password=password)
+    # model.session.add(new_user)
+    # model.session.commit()
+    # print password
+    # print email
     return redirect(url_for("index"))
 
-@app.route("/create_info")
-def create_info():
-    return render_template("create_info.html")
+# @app.route("/create_info")
+# def create_info():
+#     return render_template("create_info.html")
 
-@app.route("/create_info", methods=["POST"])
-def post_create_info():
-    age = request.form.get("age")
-    description = request.form.get("description")
-    program = request.form.get("program")
-    print age
-    print description 
-    print program 
-    return redirect(url_for("index"))
+# @app.route("/create_info", methods=["POST"])
+# def post_create_info():
+#     user_id = session.get('user_id')
+#     email = session.get('email')
+#     print user_id
+#     age = request.form.get("age")
+#     description = request.form.get("description")
+#     program = request.form.get("program")
+#     model.session.commit()
+#     user = User(id=user_id)
+#     user.description = description 
+#     print user
+#     print description 
+#     print program 
+#     return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
