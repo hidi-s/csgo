@@ -73,7 +73,7 @@ def authenticate():
     user = User.query.filter_by(email=email).first()
 
     if not user or not user.authenticate(password):
-        flash("Incorrect username or password") 
+        flash("Incorrect username or password")         
         return render_template("login.html")
 
     login_user(user)
@@ -85,7 +85,8 @@ def view_about():
 
 @app.route("/browse")
 def browse():
-    return render_template("browse.html")
+    user_list = User.query.all()
+    return render_template("browse.html", users=user_list)
 
 @app.route("/create_profile")
 def create_profile():
@@ -93,36 +94,40 @@ def create_profile():
 
 @app.route("/create_profile", methods=["POST"])
 def post_create_profile():
-    # password = request.form.get("password")
-    # email = request.form.get("email")
-    #  # def add_user(email, password):
-    # new_user = User(email=email)
-    # new_user.set_password(password=password)
-    # model.session.add(new_user)
-    # model.session.commit()
-    # print password
-    # print email
+    password = request.form.get("password")
+    email = request.form.get("email")
+    print password
+    print email                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+    new_user = User(email=email)
+    new_user.set_password(password=password)
+    model.session.add(new_user)
+    model.session.commit()
+    model.session.refresh(new_user)
+    return redirect(url_for("create_info"))
+
+@app.route("/create_info")
+def create_info():
+    return render_template("create_info.html")
+
+@app.route("/create_info", methods=["POST"])
+def post_create_info():
+    user_id = session.get('user_id')
+    current_user.age = request.form.get("age")
+    current_user.first_name = request.form.get("first_name")
+    current_user.last_name = request.form.get("last_name")
+    current_user.location = request.form.get("location")
+    current_user.tagline = request.form.get("tagline")
+    current_user.description = request.form.get("description")
+    current_user.interests = request.form.get("interests")
+    current_user.twitter = request.form.get("twitter")
+    current_user.github = request.form.get("github")
+    current_user.fb_link = request.form.get("fb_link")
+    current_user.linkedin = request.form.get("linkedin")
+
+    model.session.commit()
+    model.session.refresh(current_user)
+
     return redirect(url_for("index"))
-
-# @app.route("/create_info")
-# def create_info():
-#     return render_template("create_info.html")
-
-# @app.route("/create_info", methods=["POST"])
-# def post_create_info():
-#     user_id = ses sion.get('user_id')
-#     email = session.get('email')
-#     print user_id
-#     age = request.form.get("age")
-#     description = request.form.get("description")
-#     program = request.form.get("program")
-#     model.session.commit()
-#     user = User(id=user_id)
-#     user.description = description 
-#     print user
-#     print description 
-#     print program 
-#     return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)

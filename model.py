@@ -25,32 +25,12 @@ class User(Base, UserMixin):
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
     salt = Column(String(64), nullable=False)
-    salt2 = Column(String(64), nullable=True)
-
-    posts = relationship("Post", uselist=True)
-    profile = relationship("Profile", uselist=True)
-
-    def set_password(self, password):
-        self.salt = bcrypt.gensalt()
-        password = password.encode("utf-8")
-        self.password = bcrypt.hashpw(password, self.salt)
-
-    def authenticate(self, password):
-        password = password.encode("utf-8")
-        return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
-
-# The user profile lives here. Eventually I may want to break out the program info and followers/funders to a different table.
-class Profile(Base):
-    __tablename__ = "profile"
-
-    id = Column(Integer, primary_key=True)
     first_name = Column(String(16), nullable=True)
     last_name = Column(String(24), nullable=True)
     age = Column(Integer, nullable=True)
     location = Column(String(24), nullable=True)
     tagline = Column(String(128), nullable=True)
-    profile_description = Column(String(1024), nullable=True)
-    program_type = Column(String(128), nullable=True)
+    # progam_description = Column(String(1024), nullable=True)
     program = Column(String(128), nullable=True)
     program_cost = Column(Integer, nullable=True)
     interests = Column(String(128), nullable=True)
@@ -62,11 +42,17 @@ class Profile(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    user = relationship("User")
+    posts = relationship("Post", uselist=True)
+    # profile = relationship("Profile", uselist=True)
 
-# Once I break out my tables further I will put them here.
-# class Program(Base):
-# class Status(Base):
+    def set_password(self, password):
+        self.salt = bcrypt.gensalt()
+        password = password.encode("utf-8")
+        self.password = bcrypt.hashpw(password, self.salt)
+
+    def authenticate(self, password):
+        password = password.encode("utf-8")
+        return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
 class Post(Base):
     __tablename__ = "posts"
@@ -82,7 +68,8 @@ class Post(Base):
 
 
 def create_tables():
-    Base.metadata.drop_all(engine)
+    # Use this command to clear the tables when adding new fields. 
+    # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")
@@ -90,7 +77,6 @@ def create_tables():
     p = Post(title="This is a test post", body="This is the body of a test post.")
     u.posts.append(p)
     session.commit()
-
 
     # def add_user(email, password):
     # new_user = User(email=email)
