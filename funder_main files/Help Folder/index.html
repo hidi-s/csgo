@@ -1,0 +1,177 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>FUNDER Documentation</title>
+	<meta name="author" content="Liviu Cerchez" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="assets-docs/bronto.css" media="all" />
+	<link rel="stylesheet" href="assets-docs/site.css" media="all" />
+	<!--[if lt IE 9]>
+		<link rel="stylesheet" href="assets-docs/ie.css" type="text/css" media="screen" />
+		<script src="assets-demos/js//html5shiv.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<div id="wrapper-top" class="container">
+		<header class="row clearfix">
+			<hgroup class="grid_8">
+				<h1><strong> FUNDER Template</strong></h1>
+			</hgroup>
+
+		</header>
+	</div>
+
+	<div id="wrapper-content" class="container">
+		<article id="intro" class="row clearfix">
+			<div class="grid_12">
+				<h2>Thank you for purchasing Funder </h2>
+				<p>If you have any questions that are beyond the scope of this help file, please feel free to email funder@uou.ch - we will do our best to respond within 24 hours. </p>
+			</div>
+		</article>
+		<article id="install" class="row clearfix">
+			<div class="grid_12">
+				<h2>Installation</h2>
+				<p>Copy the files and folders in the <strong>HTML</strong> folder to your web hosting location. This will get you started and you'll be able to modify the theme based on your project.</p>
+			</div>
+		</article>
+
+        <article id="folders" class="row clearfix">
+            <div class="grid_12">
+                <h2>File Structure</h2>
+                            <p>This Template is using a powerful  front-end framework for faster and easier web development - Bootstrap 2.3.1. When you install the template you can see this:</p>
+                            <pre>
+                 Funder/
+                  ├── css/
+                  │   ├── bootstrap.css
+                  │   ├── colorbox.css
+                  │   ├── jquert-ui.css
+                  │   ├── resp.css
+                  │   ├── selectbox.css
+                  │   ├── style.css
+                  ├── js/
+                  │   ├── bootstrap.js
+                  │   ├── contact.js
+                  │   ├── jquery.colorbox.js
+                  │   ├── jquery.filter.js
+                  │   ├── jquery.js
+                  │   ├── jquery.placeholder.js
+                  │   ├── jquery.selectbox.min.js
+                  │   ├── jquery-ui.js
+                  └── img/
+                      ├── ...
+                      └── ...
+            </pre>
+
+                <p>Also You can see four types of index page (which represent the 4 different versions of Homepages): </p>
+
+                <pre>
+                 Funder/
+                  ├── index pages/
+                  │   ├── index.html
+                  │   ├── index_googlemap.html
+                  │   ├── index2columns.html
+                  │   ├── index4columns.html
+            </pre>
+                <p>Where index_googlemap.html - index page with google map in top of the page, index2columns.html - page with 2 columns of the project and index4columns.html - is the page which include 4 columns projects design and index.html is the version with the gallery. </p>
+            </div>
+        </article>
+
+
+		<article id="markup" class="row clearfix">
+			<div class="grid_12">
+				<h2>Markup Structure</h2>
+				<p>This theme has a responsive design. You can customize the content, top widgets, navbar to be as width as you want. The general inner page template structure is the same throughout the template. Here it is:</p>
+<pre>
+    &lt;div id=&quot;header&quot;&gt;
+          &lt;div class=&quot;navigate&quot;&gt;
+                 ...
+          &lt;/div&gt;
+     &lt;/div&gt;
+    &lt;div id=&quot;navtop&quot;&gt;
+           ...
+     &lt;/div&gt;
+      &lt;div class=&quot;content&quot;&gt;
+            &lt;div class=&quot;top_widgets&quot;&gt;
+                   ...
+            &lt;/div&gt;
+            &lt;h1 class=&quot;about&quot;>Tittle&lt;/h1&gt;
+            &lt;div class=&quot;content_block&quot;&gt;
+                   ...
+             &lt;/div&gt;
+     &lt;/div&gt;
+     &lt;div id=&quot;footer&quot;&gt;
+                    ...
+     &lt;/div&gt;
+
+</pre>
+			</div>
+		</article>
+
+
+		<article id="pledge" class="row clearfix">
+			<div class="grid_12">
+				<h2>Changing Pledge Amount:</h2>
+				<p>When you open the project you can easily change the pledge amount. You can find the Name of the project and adjust the value of pledge, then the percents will automatically be calculated based on your pledged amout. The HTML code looks like this:</p>
+                <pre>
+    &lt;span href="#PROJECT_NAME">PRICE&lt;/span&gt;
+</pre>
+                <p>Where PROJECT_NAME - represents the Name of the project and PRICE - value of price which you want to change. All you need to do is just the change value - the percentage rate will display automatically </p>
+			</div>
+		</article>
+
+
+		<article id="Images" class="row clearfix">
+			<div class="grid_12">
+				<h2>Changing Project Images:</h2>
+				<p>To change the images in a project, you only need to download a thumbnail picture and download a large preview picture</p>
+        </div>
+		</article>
+
+		<article id="seo" class="row clearfix">
+			<div class="grid_12">
+				<h2>SEO Settings</h2>
+				<p>The template contains &lt;head&gt; information that you would probably want to edit: title, description (SEO relevant), keywords (SEO relevant), favicon, apple touch icon and Facebook share image:</p>
+<pre>&lt;title&gt;Title goes here&lt;/title&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Description entered for SEO&quot; /&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;list of keywords&quot; /&gt;
+&lt;link rel=&quot;shortcut icon&quot; href=&quot;favicon.png&quot; /&gt;
+&lt;link rel=&quot;apple-touch-icon&quot; href=&quot;images/touch-icon.png&quot; /&gt;
+&lt;link rel=&quot;image_src&quot; href=&quot;images/touch-icon.png&quot; /&gt;</pre>
+			</div>
+		</article>
+
+
+		<article id="widgets" class="row clearfix">
+			<div class="grid_12">
+				<h2>Widgets</h2>
+				<p>This theme imports six mandatory Javascript files: jQuery, jquery.selectbox.min.js, jquery-ui.js, jquery.filter.js and typehead.js and bootstrap.js. jQuery is a Javascript library that greatly reduces the amount of code that you must write. The template includes a rich set of plugins in order to enhace the user experience: window smartresize, dootstrap slider, portfolio filter, auto-complete search etc. (some of them are placed in a common script file and the rest of them have their own separate file).</p>
+
+            </div>
+		</article>
+
+
+		<article id="credits" class="row clearfix">
+			<div class="grid_12">
+				<h2>Credits</h2>
+				<ul>
+					<li><a href="http://jquery.com">jQuery</a></li>
+					<li><a href="http://twitter.github.io/bootstrap/">Bootstrap</a></li>
+					<li><a href="http://jqueryui.com/">jQuery UI</a></li>
+					<li><a href="https://developers.google.com/maps/">Google Map developers</a></li>
+				</ul>
+			</div>
+		</article>
+
+		<article id="thankyou" class="row clearfix">
+			<div class="grid_12">
+				<h2>Greetings</h2>
+				<p>Again we thank you very much for purchasing Funder, we wish you all the possible success and please do not hesitate mailing us in case you have any questions. </p>
+				<p>Cheers &amp; Greetings</p>
+				<p>UOUdesign  </p>
+			</div>
+		</article>
+
+	</div>
+</body>
+</html>

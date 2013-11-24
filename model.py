@@ -27,18 +27,22 @@ class User(Base, UserMixin):
     salt = Column(String(64), nullable=False)
     first_name = Column(String(16), nullable=True)
     last_name = Column(String(24), nullable=True)
-    age = Column(Integer, nullable=True)
-    location = Column(String(24), nullable=True)
-    tagline = Column(String(128), nullable=True)
-    # progam_description = Column(String(1024), nullable=True)
-    program = Column(String(128), nullable=True)
-    program_cost = Column(Integer, nullable=True)
-    interests = Column(String(128), nullable=True)
-    aspirations = Column(String(128), nullable=True)
-    twitter = Column(String(128))
-    github = Column(String(128))
-    fb_link = Column(String(128))
+
+    user_type = Column(String(24), nullable=True)
+    
     linkedin = Column(String(128))
+    github = Column(String(128))
+    twitter = Column(String(128))
+
+    video = Column(String(128))
+    img_1 = Column(String(128))
+  
+    deadline_date = Column(String(128))
+    goal = Column(Integer, nullable=True)
+
+    tagline = Column(String(128), nullable=True)
+    description = Column(String(128), nullable=True)
+   
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     user_id = Column(Integer, ForeignKey("users.id"))
 
@@ -69,7 +73,7 @@ class Post(Base):
 
 def create_tables():
     # Use this command to clear the tables when adding new fields. 
-    # Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")

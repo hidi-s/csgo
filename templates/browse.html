@@ -2,8 +2,20 @@
 {% block body %}
 {% for user in users %}
 
-    <h2>User {{user.email}}, age {{user.age}} </h2>
-    	
+    <h2>{{user.tagline}} </h2>
+    <h2>{{user.img_1}} </h2>
+    <h2>{{user.first_name}} {{user.last_name}} </h2>    
+    <h2>{{user.goal}} </h2>
+    <h2>{{user.deadline_date}} </h2>
+    
+    
 {% endfor %}
 {% endblock %}
-	
+
+
+<iframe width="640" height="360" src="//www.youtube.com/embed/bX3jvD7XFPs?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+
+
+	<h2>{{user.description}} </h2>
+	<iframe width="640" height="360" src="{{user.video}}" frameborder="0" allowfullscreen></iframe>
+	<h2>{{user.twitter}} {{user.github}} {{user.linkedin}} </h2>

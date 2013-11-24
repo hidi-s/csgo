@@ -1,12 +1,23 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block body %}
-<form method="post">
-    <!-- <input type="text" name="first_name" placeholder="First Name"><br>
-    <input type="text" name="last_name" placeholder="Last Name"><br> -->
-    <input type="text" name="email" placeholder="Email"><br>
-    <!-- <input type="text" name="age" placeholder="Age"><br> -->
-    <input type="password" name="password" placeholder="Password"><br>
-    <input type="submit">
-</form>
+<div class="container-fluid">
+ 	<div class="row-fluid">
+ 		<div class="span2">
+      <!--Sidebar content-->
+    	</div>
+
+	    	<div class="span10">
+		<form method="post">
+		    <input type="text" name="email" placeholder="Email"><br>
+		    <input type="password" name="password" placeholder="Password"><br>
+		    <input type="text" name="first_name" placeholder="First Name"><br>
+		    <input type="text" name="last_name" placeholder="Last Name"><br>
+			<button class="btn" type="submit">Registers</button>
+		    <!-- #Need to add label for student or supporter -->
+	</form>
+	</div>
+</div>
+</div>
+</div>
 {% endblock %}
 

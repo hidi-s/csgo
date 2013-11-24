@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+<form method="post">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+      <!--Sidebar content-->
+    </div>
+    <div class="span10">
+        <form method="post">
+            <input type="text" name="video_url" placeholder="Video url"><br>
+            <input type="text" name="tagline" placeholder="Tagline"><br>
+            <input type="text" name="description" placeholder="Description"><br>
+            <input type="text" name="goal" placeholder="Goal"><br>
+            <input type="text" name="twitter" placeholder="Twitter"><br>
+            <input type="text" name="github" placeholder="Github"><br>
+            <input type="text" name="linkedin" placeholder="Linkedin"><br>
+            <input type="text" name="deadline" placeholder="Deadline"><br>
+            <p> Upload image <input type="file" name="img_1" placeholder="Upload image"></p><br> 
+            <button class="btn" type="submit">Submit</button><br>
+            <!-- #Need to add label for student or supporter -->
+        </form>
+    </div>
+</div>
+</div>
+</form>
+{% endblock %}
+

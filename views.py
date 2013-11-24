@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, g, session, url_for, flash
 from model import User, Post
-from flask.ext.login import LoginManager, login_required, login_user, current_user
+from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
 import config
 import forms
@@ -17,6 +17,13 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
 
 # End login stuff
 
@@ -65,7 +72,7 @@ def authenticate():
     form = forms.LoginForm(request.form)
     if not form.validate():
         flash("Incorrect username or password") 
-        return render_template("login.html")
+        return render_template("base_template.html")
 
     email = form.email.data
     password = form.password.data
@@ -88,6 +95,11 @@ def browse():
     user_list = User.query.all()
     return render_template("browse.html", users=user_list)
 
+@app.route("/profile")
+def view_profile():
+    user_list = User.query.all()
+    return render_template("profile.html", users=user_list)
+
 @app.route("/create_profile")
 def create_profile():
     return render_template("create_profile.html")
@@ -96,38 +108,51 @@ def create_profile():
 def post_create_profile():
     password = request.form.get("password")
     email = request.form.get("email")
+    first_name=request.form.get("first_name")
+    last_name=request.form.get("last_name")
     print password
-    print email                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+    print email    
+    print first_name
+    print last_name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     new_user = User(email=email)
     new_user.set_password(password=password)
+    new_user.first_name=first_name
+    new_user.last_name=last_name
     model.session.add(new_user)
     model.session.commit()
+
     model.session.refresh(new_user)
     return redirect(url_for("create_info"))
 
 @app.route("/create_info")
 def create_info():
-    return render_template("create_info.html")
+    return render_template("create_info2.html")
 
 @app.route("/create_info", methods=["POST"])
 def post_create_info():
     user_id = session.get('user_id')
-    current_user.age = request.form.get("age")
-    current_user.first_name = request.form.get("first_name")
-    current_user.last_name = request.form.get("last_name")
-    current_user.location = request.form.get("location")
+    current_user.video = request.form.get("video_url")
     current_user.tagline = request.form.get("tagline")
     current_user.description = request.form.get("description")
-    current_user.interests = request.form.get("interests")
+    current_user.goal = request.form.get("goal")
     current_user.twitter = request.form.get("twitter")
     current_user.github = request.form.get("github")
-    current_user.fb_link = request.form.get("fb_link")
     current_user.linkedin = request.form.get("linkedin")
-
+    current_user.deadline_date = request.form.get("deadline")
+    current_user.img_1 = request.form.get("img_1")
+    model.session.add(current_user)
     model.session.commit()
+    # print request.form.get("video_url")
+    # print request.form.get("tagline")
+    # print request.form.get("description")
+    # print request.form.get("goal")
+    # print request.form.get("twitter")
+    # print request.form.get("github")
+    # print request.form.get("linkedin")
+    # print request.form.get("deadline")
+    # print request.form.get("img_1")
     model.session.refresh(current_user)
-
-    return redirect(url_for("index"))
+    return redirect(url_for("browse"))
 
 if __name__ == "__main__":
     app.run(debug=True)
