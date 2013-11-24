@@ -7,7 +7,7 @@
       <!--Sidebar content-->
     </div>
     <div class="span10">
-        <form method="post">
+        <form method="POST" action="">
             <input type="text" name="video_url" placeholder="Video url"><br>
             <input type="text" name="tagline" placeholder="Tagline"><br>
             <input type="text" name="description" placeholder="Description"><br>
@@ -16,8 +16,8 @@
             <input type="text" name="github" placeholder="Github"><br>
             <input type="text" name="linkedin" placeholder="Linkedin"><br>
             <input type="text" name="deadline" placeholder="Deadline"><br>
-            <p> Upload image <input type="file" name="img_1" placeholder="Upload image"></p><br> 
-            <button class="btn" type="submit">Submit</button><br>
+            <button class="btn" type="submit" value="Upload">Submit</button><br>
+       
             <!-- #Need to add label for student or supporter -->
         </form>
     </div>
@@ -26,3 +26,4 @@
 </form>
 {% endblock %}
 
+ 

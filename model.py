@@ -10,10 +10,17 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship, backref
 
 from flask.ext.login import UserMixin
 
+# These are imported for uploading files
+from flask import Flask, request, redirect, url_for
+from werkzeug import secure_filename
+
 engine = create_engine(config.DB_URI, echo=False)
 session = scoped_session(sessionmaker(bind=engine,
                          autocommit = False,
                          autoflush = False))
+
+
+
 
 Base = declarative_base()
 Base.query = session.query_property()
@@ -73,7 +80,7 @@ class Post(Base):
 
 def create_tables():
     # Use this command to clear the tables when adding new fields. 
-    Base.metadata.drop_all(engine)
+    # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")

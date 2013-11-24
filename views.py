@@ -5,14 +5,25 @@ from flask.ext.markdown import Markdown
 import config
 import forms
 import model
+import os 
+
+UPLOAD_FOLDER = './static/img/UPLOADS'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config.from_object(config)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+   
+    
 # Stuff to make login easier
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -130,6 +141,7 @@ def create_info():
 
 @app.route("/create_info", methods=["POST"])
 def post_create_info():
+    # if current_user.is_anonymous == True: 
     user_id = session.get('user_id')
     current_user.video = request.form.get("video_url")
     current_user.tagline = request.form.get("tagline")
@@ -139,9 +151,15 @@ def post_create_info():
     current_user.github = request.form.get("github")
     current_user.linkedin = request.form.get("linkedin")
     current_user.deadline_date = request.form.get("deadline")
-    current_user.img_1 = request.form.get("img_1")
     model.session.add(current_user)
     model.session.commit()
+    model.session.refresh(current_user)
+
+    return redirect(url_for("browse"))
+
+
+    # else: 
+        # return render_template(url_for("create_profile")
     # print request.form.get("video_url")
     # print request.form.get("tagline")
     # print request.form.get("description")
@@ -151,8 +169,10 @@ def post_create_info():
     # print request.form.get("linkedin")
     # print request.form.get("deadline")
     # print request.form.get("img_1")
-    model.session.refresh(current_user)
-    return redirect(url_for("browse"))
 
+
+
+
+   
 if __name__ == "__main__":
     app.run(debug=True)
