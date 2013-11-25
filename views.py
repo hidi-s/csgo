@@ -2,27 +2,43 @@ from flask import Flask, render_template, redirect, request, g, session, url_for
 from model import User, Post
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES 
 import config
 import forms
 import model
 import os 
 
-UPLOAD_FOLDER = './static/img/UPLOADS'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 app.config.from_object(config)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-   
-    
+
+images = UploadSet('images', IMAGES)
+configure_uploads(app, (images))
+
 # Stuff to make login easier
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+@app.route("/upload", methods=["POST", "GET"])
+def upload():
+    if request.method == "POST" and 'image' in request.files:
+        print "saving image"
+        filename = images.save(request.files['image'])
+    elif request.method == "POST" :
+        print "no image on request"
+    else:
+        print "render uploads"
+        return render_template("upload.html")
+    
+    return redirect(url_for("browse"))
+
+# @app.route("/post_upload", methods=["POST"])
+# def post_upload():
+#     return redirect(url_for("browse"))
+
+
 
 
 @login_manager.user_loader
@@ -156,6 +172,7 @@ def post_create_info():
     model.session.refresh(current_user)
 
     return redirect(url_for("browse"))
+
 
 
     # else: 

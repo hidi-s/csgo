@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+<form method="post">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+      <!--Sidebar content-->
+    </div>
+    <div class="span10">
+        <form method="POST" enctype=multipart/form-data action="{{url_for('upload')}}">
+            <input type=file name=image>
+            <button class="btn" type="submit" >Submit</button><br>
+       
+            <!-- #Need to add label for student or supporter -->
+        </form>
+    </div>
+</div>
+</div>
+</form>
+{% endblock %}
