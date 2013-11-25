@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
-<form method="post">
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span2">
       <!--Sidebar content-->
     </div>
     <div class="span10">
-        <form method="POST" action="">
+        <form method="POST" action="" enctype=multipart/form-data action="{{url_for('upload')}}">
             <input type="text" name="video_url" placeholder="Video url"><br>
             <input type="text" name="tagline" placeholder="Tagline"><br>
             <input type="text" name="description" placeholder="Description"><br>
@@ -16,6 +15,7 @@
             <input type="text" name="github" placeholder="Github"><br>
             <input type="text" name="linkedin" placeholder="Linkedin"><br>
             <input type="text" name="deadline" placeholder="Deadline"><br>
+            <p>Upload image</p><input type=file name=image>
             <button class="btn" type="submit" value="Upload">Submit</button><br>
        
             <!-- #Need to add label for student or supporter -->
@@ -23,7 +23,6 @@
     </div>
 </div>
 </div>
-</form>
 {% endblock %}
 
  

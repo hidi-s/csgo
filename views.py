@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, request, g, session, url_for, flash
-from model import User, Post
+from flask import Flask, render_template, redirect, request, g, session, url_for, flash, send_from_directory
+from model import User, Campaign, Supporters, Comments 
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES 
@@ -21,6 +21,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+#Testing upload functionality 
 @app.route("/upload", methods=["POST", "GET"])
 def upload():
     if request.method == "POST" and 'image' in request.files:
@@ -34,13 +35,13 @@ def upload():
     
     return redirect(url_for("browse"))
 
-# @app.route("/post_upload", methods=["POST"])
-# def post_upload():
-#     return redirect(url_for("browse"))
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'],
+                               filename)
 
-
-
+#login and logout stuff here
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
@@ -51,45 +52,6 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
-
-# End login stuff
-
-# Adding markdown capability to the app
-Markdown(app)
-
-@app.route("/")
-def index():
-    # testvar = request.args.get("arg", "empty")
-    posts = Post.query.all()
-    # print testvar   
-    return render_template("index.html", posts=posts)
-
-@app.route("/post/<int:id>")
-def view_post(id):
-    post = Post.query.get(id)
-    return render_template("post.html", post=post)
-
-@app.route("/post/new")
-@login_required
-def new_post():
-    return render_template("new_post.html")
-
-@app.route("/post/new", methods=["POST"])
-@login_required
-def create_post():
-    form = forms.NewPostForm(request.form)
-    if not form.validate():
-        flash("Error, all fields are required")
-        return render_template("new_post.html")
-
-    post = Post(title=form.title.data, body=form.body.data)
-    current_user.posts.append(post) 
-    
-    model.session.commit()
-    model.session.refresh(post)
-
-    return redirect(url_for("view_post", id=post.id))
-
 @app.route("/login")
 def login():
     return render_template("login.html")
@@ -99,7 +61,7 @@ def authenticate():
     form = forms.LoginForm(request.form)
     if not form.validate():
         flash("Incorrect username or password") 
-        return render_template("base_template.html")
+        return render_template("base.html")
 
     email = form.email.data
     password = form.password.data
@@ -112,21 +74,36 @@ def authenticate():
 
     login_user(user)
     return redirect(request.args.get("next", url_for("index")))
+# End login stuff
+
+# Adding markdown capability to the app
+Markdown(app)
+
+@app.route("/")
+def index():
+    # testvar = request.args.get("arg", "empty")
+    # print testvar   
+    return render_template("index.html")
+
 
 @app.route("/about")
 def view_about():
     return render_template("about.html")
 
+#Browse displays basic info for all users, including their phot
 @app.route("/browse")
 def browse():
-    user_list = User.query.all()
-    return render_template("browse.html", users=user_list)
+    campaign_list = Campaign.query.all()
+    return render_template("browse.html", campaigns=campaign_list)
 
-@app.route("/profile")
-def view_profile():
-    user_list = User.query.all()
-    return render_template("profile.html", users=user_list)
+#Profile displays detailed info for one user and displays their video 
+#TODO fix links for this from profile
+# @app.route("/campaign/<int:id>")
+# def view_profile(id):
+#     user_list = User.query.get(id)
+#     return render_template("profile.html", users=user_list)
 
+#Create profile is registration for users  
 @app.route("/create_profile")
 def create_profile():
     return render_template("create_profile.html")
@@ -151,6 +128,7 @@ def post_create_profile():
     model.session.refresh(new_user)
     return redirect(url_for("create_info"))
 
+#Create_info is a form which stores information about a user's campaign
 @app.route("/create_info")
 def create_info():
     return render_template("create_info2.html")
@@ -159,18 +137,27 @@ def create_info():
 def post_create_info():
     # if current_user.is_anonymous == True: 
     user_id = session.get('user_id')
-    current_user.video = request.form.get("video_url")
-    current_user.tagline = request.form.get("tagline")
-    current_user.description = request.form.get("description")
-    current_user.goal = request.form.get("goal")
-    current_user.twitter = request.form.get("twitter")
-    current_user.github = request.form.get("github")
-    current_user.linkedin = request.form.get("linkedin")
-    current_user.deadline_date = request.form.get("deadline")
-    model.session.add(current_user)
+    video = request.form.get("video_url")
+    tagline = request.form.get("tagline")
+    description = request.form.get("description")
+    goal = request.form.get("goal")
+    twitter = request.form.get("twitter")
+    github = request.form.get("github")
+    linkedin = request.form.get("linkedin")
+    deadline_date = request.form.get("deadline")
+    campaign = Campaign(video=video, user_id=user_id, description=description, goal=goal, deadline_date=deadline_date, tagline=tagline)
+    model.session.add(campaign)
     model.session.commit()
-    model.session.refresh(current_user)
-
+    model.session.refresh(campaign)
+    if 'image' in request.files:
+        print "saving image"
+        #SAVE THE FILENAME AS THE USER ID. 
+        session.get('user_id') = images.save(request.files['image'])
+        # filename = session.get('user_id')
+        # print filename 
+        # print session.get('user_id')
+    else:
+        print "no image"
     return redirect(url_for("browse"))
 
 
@@ -186,10 +173,6 @@ def post_create_info():
     # print request.form.get("linkedin")
     # print request.form.get("deadline")
     # print request.form.get("img_1")
-
-
-
-
    
 if __name__ == "__main__":
     app.run(debug=True)
