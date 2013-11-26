@@ -95,14 +95,14 @@ def view_about():
 def browse():
     user_list = User.query.all()
     campaign_list = Campaign.query.all()
-    return render_template("browse.html", campaigns=campaign_list, user_list=user_list)
+    return render_template("browse.html", campaign_list=campaign_list, user_list=user_list)
 
 #Profile displays detailed info for one user and displays their video 
 #TODO fix links for this from profile
 @app.route("/campaign/<int:id>")
 def view_profile(id):
     user = User.query.get(id)
-    return render_template("profile.html", user=user)
+    return render_template("campaign.html", user=user)
 
 #Create profile is registration for users  
 @app.route("/create_profile")

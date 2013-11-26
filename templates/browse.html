@@ -2,10 +2,14 @@
 {% block body %}
 {% for user in user_list %}
 
-	<h2>{{user.email}} {{user.first_name}} {{user.last_name}} {{user.id}}</h2>
-	<h2>{{user.linkedin}} {{user.github}} {{user.twitter}} </h2>
-    <a href="/campaign/{{user.id}}"><img src="../static/images/{{user.id}}.png"></a>
-  
+	<h2>{{user.email}} {{user.first_name}} {{user.last_name}} {{user.id}} {{user.campaign.video}}</h2>
+	<!-- <h2>{{user.campaign.linkedin}} {{user.campaign.github}} {{user.campaign.twitter}} </h2> -->
+{% endfor %}
+
+{% for user in user_list %}
+	{% for campaign in campaign_list %}
+    <a href="/campaign/{{campaign.id}}"><img src="../static/images/{{campaign.id}}.png"></a>
+{% endfor %}
 {% endfor %}
 {% endblock %}
 

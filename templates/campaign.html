@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% block body %}
 
-	<h2>{{user.email}} {{user.first_name}} {{user.last_name}} {{user.id}}</h2>
+	<h2>{{user.email}} {{user.first_name}} {{user.last_name}} {{user.id}} {{user.campaign.video}}</h2>
 	<h2>{{user.linkedin}} {{user.github}} {{user.twitter}} </h2>
-    <a href="/campaign/{{user.id}}"><img src="../static/images/{{user.id}}.png"></a>
-  
+	<
+    <img src="../static/images/{{user.id}}.png">
+    <iframe width="640" height="360" src="{{user.campaign.video}}" frameborder="0" allowfullscreen></iframe>
+
 {% endblock %}

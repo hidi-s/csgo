@@ -94,7 +94,7 @@ class Comments(Base):
 
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
 def create_tables():
-    # Base.metadata.drop_all(engine)
+    # Base.metadata.drop_all(engine)s
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")
