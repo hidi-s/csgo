@@ -2,18 +2,11 @@
 {% block body %}
 {% for user in user_list %}
 
-	<h2>Email: {{user.email}} Name: {{user.first_name}} {{user.last_name}} User ID: {{user.id}}</h2>
+	<h2>Email: {{user.email}} Name: {{user.first_name}} {{user.last_name}}</h2>
 	<a href="/campaign/{{user.id}}"><img src="./static/images/{{user.id}}.png"></a>
-		{{user.campaigns}}
-		{% for campaign in user.campaigns %}
-
-			video: {{campaign.video}}
-
-			deadline: {{campaign.deadline}}
 		{% endfor %}
 	</h2>
 
-{% endfor %}
 {% endblock %}
 {#
 <!-- <h2>{{user.campaign.linkedin}} {{user.campaign.github}} {{user.campaign.twitter}} </h2> -->

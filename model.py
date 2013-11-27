@@ -37,9 +37,7 @@ class User(Base, UserMixin):
     twitter = Column(String(128), nullable=True)
     img_1 = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
-
-    #user_id = Column(Integer, ForeignKey("users.id"))
-
+    approved = Column(Boolean, default=False)
   
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -54,7 +52,6 @@ class Campaign(Base):
     __tablename__ = "campaigns"
     id = Column(Integer, primary_key=True)
     video = Column(String(128))
-    img_1 = Column(String(128))
     deadline_date = Column(String(128))
     goal = Column(Integer, nullable=True)
     tagline = Column(String(128), nullable=True)
@@ -96,10 +93,6 @@ class Comments(Base):
 def create_tables():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
-    u = User(email="test@test.com")
-    u.set_password("unicorn")
-    session.add(u)
-    session.commit()
 
  
 if __name__ == "__main__":
