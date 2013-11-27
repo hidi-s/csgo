@@ -30,17 +30,17 @@ class User(Base, UserMixin):
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)
     salt = Column(String(64), nullable=False)
-    first_name = Column(String(16), nullable=True)
-    last_name = Column(String(24), nullable=True)
-    user_type = Column(String(24), nullable=True)
-    linkedin = Column(String(128))
-    github = Column(String(128))
-    twitter = Column(String(128))
-    img_1 = Column(String(128))
+    first_name = Column(String(16), nullable=False)
+    last_name = Column(String(24), nullable=False)
+    linkedin = Column(String(128), nullable=True)
+    github = Column(String(128), nullable=True)
+    twitter = Column(String(128), nullable=True)
+    img_1 = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
 
-    user_id = Column(Integer, ForeignKey("users.id"))
+    #user_id = Column(Integer, ForeignKey("users.id"))
 
+  
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
         password = password.encode("utf-8")
@@ -51,7 +51,7 @@ class User(Base, UserMixin):
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
 class Campaign(Base):
-    __tablename__ = "campaign"
+    __tablename__ = "campaigns"
     id = Column(Integer, primary_key=True)
     video = Column(String(128))
     img_1 = Column(String(128))
@@ -62,7 +62,7 @@ class Campaign(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
 
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", backref="campaign")
+    user = relationship(User, backref=backref("campaigns", uselist=True))
 
 class Supporters(Base):
     __tablename__ = "supporters"
@@ -71,7 +71,7 @@ class Supporters(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", backref="supported")
 
-    campaign_id = Column(Integer, ForeignKey("campaign.id"))
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     campaign = relationship("Campaign", backref=backref("supporters", uselist=True))
 
 class Comments(Base):
@@ -85,7 +85,7 @@ class Comments(Base):
     posted_at = Column(DateTime, nullable=True, default=None)
     user = relationship("User", backref="comments")
 
-    campaign_id = Column(Integer, ForeignKey("campaign.id"))
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     campaign = relationship("Campaign", backref=backref("comments", uselist=True))
     
 
@@ -94,7 +94,7 @@ class Comments(Base):
 
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
 def create_tables():
-    # Base.metadata.drop_all(engine)s
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     u = User(email="test@test.com")
     u.set_password("unicorn")

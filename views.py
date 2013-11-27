@@ -93,9 +93,9 @@ def view_about():
 #Browse displays basic info for all users, including their phot
 @app.route("/browse")
 def browse():
+    print session.keys()
     user_list = User.query.all()
-    campaign_list = Campaign.query.all()
-    return render_template("browse.html", campaign_list=campaign_list, user_list=user_list)
+    return render_template("browse.html", user_list=user_list)
 
 #Profile displays detailed info for one user and displays their video 
 #TODO fix links for this from profile
@@ -141,17 +141,32 @@ def post_create_info():
     video = request.form.get("video_url")
     tagline = request.form.get("tagline")
     description = request.form.get("description")
-    goal = request.form.get("goal")
+    goal = int(request.form.get("goal"))
     twitter = request.form.get("twitter")
     github = request.form.get("github")
     linkedin = request.form.get("linkedin")
     deadline_date = request.form.get("deadline")
-    campaign = Campaign(video=video, user_id=user_id, description=description, goal=goal, deadline_date=deadline_date, tagline=tagline)
+    # strftime for deadline 
+
+    print "user_id", session.get("user_id")
+
+    campaign = Campaign(
+        video=video,
+        user_id=user_id,
+        description=description,
+        goal=goal,
+        deadline_date=deadline_date,
+        tagline=tagline
+        )
+    print campaign.video 
     model.session.add(campaign)
     model.session.commit()
+    print campaign 
     model.session.refresh(campaign)
+    print campaign 
+
     if 'image' in request.files:
-        image_id = "%s.png" % user_id
+        image_id = "%s.jpg" % user_id
         print image_id
         filename = images.save(request.files['image'], folder=None, name=image_id) 
         print "saving image"
