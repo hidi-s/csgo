@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 {% block body %}
-{% for user in user_list %}
-
-	<h2>Email: {{user.email}} Name: {{user.first_name}} {{user.last_name}}</h2>
-	<a href="/campaign/{{user.id}}"><img src="./static/images/{{user.img_2}}" class="img-circle"></a>
+<div class="container">
+	 	{% for column in user_list | sort | slice(4) %}
+	 	<div class="four columns">
+	 		{%- for user in column -%}
+	 	<div class="col-md-4">
+			<p><span><a href="/campaign/{{user.id}}"><img src="./static/images/{{user.img_2}}" class="img-thumbnail" </a></span></p><br> 
+			<p>{{user.first_name}} {{user.last_name}}</p> 
+			{%- endfor -%}
+		</div> 
+		</div> 
 		{% endfor %}
-	</h2>
-	<a class="btn btn-default" href="#" role="button">Link</a>
+		
+</div>
+
 
 
 {% endblock %}
