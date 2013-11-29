@@ -35,7 +35,7 @@ class User(Base, UserMixin):
     linkedin = Column(String(128), nullable=True)
     github = Column(String(128), nullable=True)
     twitter = Column(String(128), nullable=True)
-    img_1 = Column(String(128), nullable=True)
+    img_2 = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     approved = Column(Boolean, default=False)
   
@@ -57,7 +57,6 @@ class Campaign(Base):
     tagline = Column(String(128), nullable=True)
     description = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
-
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, backref=backref("campaigns", uselist=True))
 
@@ -90,9 +89,9 @@ class Comments(Base):
 
 
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
-def create_tables():
-    Base.metadata.drop_all(engine)
-    Base.metadata.create_all(engine)
+# def create_tables():
+#     Base.metadata.drop_all(engine)
+#     Base.metadata.create_all(engine)
 
  
 if __name__ == "__main__":

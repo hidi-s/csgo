@@ -3,9 +3,11 @@
 {% for user in user_list %}
 
 	<h2>Email: {{user.email}} Name: {{user.first_name}} {{user.last_name}}</h2>
-	<a href="/campaign/{{user.id}}"><img src="./static/images/{{user.id}}.png"></a>
+	<a href="/campaign/{{user.id}}"><img src="./static/images/{{user.img_2}}" class="img-circle"></a>
 		{% endfor %}
 	</h2>
+	<a class="btn btn-default" href="#" role="button">Link</a>
+
 
 {% endblock %}
 {#

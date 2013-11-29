@@ -3,9 +3,9 @@
 
 	<h2>Name: {{user.first_name}} {{user.last_name}}</h2>
 	<h2>Linkedin/Github/Twitter: {{user.linkedin}} {{user.github}} {{user.twitter}} </h2>
-	<div class="fb-share-button" data-href="http://localhost:5000/campaign/1" data-width="100" data-type="button_count"></div>
+	<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="100" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 	
-    <img src="../static/images/{{user.id}}.png">
+    <img src="../static/images/{{user.img_2}}">
 
     {% for campaign in user.campaigns %}
     <h1></h1>
@@ -14,6 +14,8 @@
     <h1>{{campaign.deadline_date}}</h1>
     <h1>{{campaign.goal}}</h1>
     <iframe width="640" height="360" src="{{campaign.video}}" frameborder="0" allowfullscreen></iframe>
+    <!-- Put comments here, with comme -->
+    <h1>{{cam}}
     {% endfor %}
 {% endblock %}
 
