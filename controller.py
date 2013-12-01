@@ -60,26 +60,42 @@ def login():
 
 @app.route("/login", methods=["POST"])
 def authenticate():
-    form = forms.LoginForm(request.form)
-    if not form.validate():
-        flash("Incorrect username or password") 
-        return render_template("base.html")
+    if request.form['btn'] == "login": 
+        form_login = forms.LoginForm(request.form)
+        if not form_login.validate():
+            flash("Incorrect username or password") 
+            return render_template("base.html")
 
-    email = form.email.data
-    password = form.password.data
+        email = form_login.email.data
+        password = form_login.password.data
 
-    user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
 
-    if not user or not user.authenticate(password):
-        flash("Incorrect username or password")         
-        return render_template("login.html")
+        if not user or not user.authenticate(password):
+            flash("Incorrect username or password")         
+            return render_template("login.html")
 
-    login_user(user)
-    return redirect(request.args.get("next", url_for("index")))
-# End login stuff
+        login_user(user)
 
-# Adding markdown capability to the app
-Markdown(app)
+        return redirect(request.args.get("next", url_for("index")))
+
+    elif request.form['btn'] == "register": 
+        password = request.form.get("password")
+        email = request.form.get("email")
+        first_name=request.form.get("first_name")
+        last_name=request.form.get("last_name")
+        new_user = User(email=email)
+        new_user.set_password(password=password)
+        new_user.first_name=first_name
+        new_user.last_name=last_name
+        model.session.add(new_user)
+        model.session.commit()
+
+        return redirect(url_for("browse"))
+
+    elif request.form['btn'] == "fb_login":
+
+        return redirect(url_for("browse"))
 
 @app.route("/")
 def index():
@@ -106,30 +122,6 @@ def view_profile(id):
     user = User.query.get(id)
     return render_template("campaign.html", user=user)
 
-#Create profile is registration for users  
-@app.route("/create_profile")
-def create_profile():
-    return render_template("create_profile.html")
-
-@app.route("/create_profile", methods=["POST"])
-def post_create_profile():
-    password = request.form.get("password")
-    email = request.form.get("email")
-    first_name=request.form.get("first_name")
-    last_name=request.form.get("last_name")
-    print password
-    print email    
-    print first_name
-    print last_name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-    new_user = User(email=email)
-    new_user.set_password(password=password)
-    new_user.first_name=first_name
-    new_user.last_name=last_name
-    model.session.add(new_user)
-    model.session.commit()
-
-    model.session.refresh(new_user)
-    return redirect(url_for("create_info"))
 
 #Create_info is a form which stores information about a user's campaign
 @app.route("/create_info")
@@ -176,6 +168,7 @@ def post_create_info():
         print current_user 
            #SAVE THE FILENAME AS THE USER ID. 
         current_user.img_2 = image_id  
+        model.session.add(current_user)
         model.session.commit()
         print filename 
         print session.get('user_id')

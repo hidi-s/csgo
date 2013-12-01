@@ -1,10 +1,59 @@
 {% extends 'base.html' %}
 {% block body %}
 
-<form method="post">
-    <input type="text" name="email" placeholder="Email"><br>
-    <input type="password" name="password" placeholder="Password"><br>
-    <input type="submit">
-</form>
+<div class="container-fluid">
+	<div class="row">
+
+        	<div class="col-md-3">	
+				<h4> Log in </h4>
+				<h4><small> Please log in to continue </small></h4><br> 
+				<form role ="form" method="post">
+					<div class="form-group">
+						<label for="email">Email address</label>
+					    <input type="email" name="email" class="form-control" placeholder="Enter email"><br>
+						<label for"password">Password</label> 
+					    <input type="password" class="form-control" name="password" placeholder="Password"><br>
+					</div>
+					<button type="submit" value="login" name="btn" class="btn btn-dfault">Submit</button>  
+				</form>
+			</div> 
+
+			<div class="col-md-1">
+			</div> 
+
+		    <div class="col-md-3">
+		    	<h4> New to CS:Go? </h4>
+				<h4><small> Registering is required to continue </small></h4><br> 
+
+				<form role="form" method="post">
+					<div class="form-group">
+						<label for="email">Email address</label>
+						<input type="email" name="email" class="form-control" placeholder="Enter email"><br>
+					    <label for="password">Password</label> 
+					    <input type="password" class="form-control" name="password" placeholder="Password"><br>
+					    <label for="first_name">First Name</label> </br> 
+					    <input type="text" class="form-control" name="first_name" placeholder="First Name"><br>
+					    <label for="last_name">Last Name</label><br> 
+					    <input type="text" class="form-control" name="last_name" placeholder="Last Name"><br>
+				   	</div>
+					<button type="submit" value="register" name="btn" class="btn btn-dfault">Register</button
+				</form>
+			</div> 
+
+			<div class="col-md-1">
+			</div> 
+
+			<div class="col-md-3">	
+				<h4> Log in with Facebook </h4>
+				<h4><small> A fast way to register </small></h4><br> 
+
+				<form role="form">
+					<div class="form-group">
+	            	<fb:login-button autologoutlink="true" name="btn" value="fb_login" show-faces="true" class="navbar-btn"></fb:login-button>
+	            </div> 
+	       	 	</form>
+	       	</div>
+	</div> 
+</div> 
 
 {% endblock %}
