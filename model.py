@@ -59,6 +59,7 @@ class Campaign(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, backref=backref("campaigns", uselist=True))
+    approved = Column(Boolean, default=False)
 
 class Supporters(Base):
     __tablename__ = "supporters"

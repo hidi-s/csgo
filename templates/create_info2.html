@@ -1,35 +1,45 @@
 {% extends "base.html" %}
 {% block body %}
 
+<div class="container-fluid">
+    <div class="row">
+
+
 
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span2">
-      <!--Sidebar content-->
-    </div>
-
-   
-
-    <div class="span10">
-        <form method="POST" action="" enctype=multipart/form-data action="{{url_for('upload')}}">
-            <input type="text" name="video_url" placeholder="Video url"><br>
-            <input type="text" name="tagline" placeholder="Tagline"><br>
-            <input type="text" name="description" placeholder="Description"><br>
-            <input type="text" name="goal" placeholder="Goal"><br>
-            <input type="text" name="twitter" placeholder="Twitter"><br>
-            <input type="text" name="github" placeholder="Github"><br>
-            <input type="text" name="linkedin" placeholder="Linkedin"><br>
-            <input type="text" name="deadline" placeholder="Deadline"><br>
-            <p>Upload image</p><input type=file name=image>
-            <button class="btn" type="submit" value="Upload">Submit</button><br>
-
-
-       
-            <!-- #Need to add label for student or supporter -->
+    <div class="row">
+        <div class="col-md-3"> 
+        </div> 
+        <div class="col-md-6">     
+            <h4> Create campaign </h4>
+            <h4><small> Tell us more about yourself and your interests. </small></h4><br> 
+            <form role="form" method="POST" action="" enctype=multipart/form-data action="{{url_for('upload')}}">
+                <div class="form-group"> 
+                    <label for="video_url">Video url</label>
+                    <input type="text" class="form-control" name="video_url" placeholder="Video url"><br>
+                    <label for="tagline">Tagline</label>
+                    <input type="text" class="form-control" name="tagline" placeholder="Tagline"><br>
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" name="description" placeholder="Description"><br>
+                    <label for="goal">Goal</label>
+                    <input type="text" class="form-control" name="goal" placeholder="$"><br>
+                    <label for="twitter">Twitter</label>
+                    <input type="text" class="form-control" name="twitter" placeholder="Twitter"><br>
+                    <label for="github">Github</label>
+                    <input type="text" class="form-control" name="github" placeholder="Github"><br>
+                    <label for="linkedin">Linkedin</label>
+                    <input type="text" class="form-control" name="linkedin" placeholder="Linkedin"><br>
+                    <label for="deadline">Deadline</label>
+                    <input type="text" class="form-control" name="deadline" placeholder="Deadline"><br>
+                    <label for="image">Upload campaign image</label>
+                    <input type=file name=image><br> 
+                    <button class="btn" type="submit" value="Upload">Submit</button><br>
+                </div> 
         </form>
+        </div>
+        <div class="col-md-3"> 
+        </div>     
     </div>
-</div>
 </div>
 {% endblock %}
 
- 

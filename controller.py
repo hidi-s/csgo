@@ -112,7 +112,7 @@ def view_about():
 @app.route("/browse")
 def browse():
     print session.keys()
-    user_list = User.query.filter_by(approved=False).all()
+    user_list = User.query.filter_by(approved=True).all()
     return render_template("browse.html", user_list=user_list)
 
 #Profile displays detailed info for one user and displays their video 

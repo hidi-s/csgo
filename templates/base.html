@@ -30,6 +30,7 @@
       // login status of the person. In this case, we're handling the situation where they 
       // have logged in to the app.
       testAPI();
+      getInfoAPI();
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
       // FB.login() to prompt them to do so. 
@@ -67,6 +68,13 @@
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Good to see you, ' + response.name + '.');
+    });
+  }
+
+  function getInfoAPI() {
+    FB.api('/me', function(response) {
+        var name = response.name;
+        first_name= $("name");
     });
   }
 </script>
@@ -118,7 +126,7 @@ $( "#fb_logout" ).bind( "click", function() {
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href={{url_for("browse")}}>Browse</a>
+    <a class="navbar-brand" href={{url_for("browse")}}>CS:Go</a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
