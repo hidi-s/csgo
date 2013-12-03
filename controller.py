@@ -94,7 +94,13 @@ def authenticate():
         return redirect(url_for("browse"))
 
     elif request.form['btn'] == "fb_login":
-
+        fb_name = request.form.get("name")
+        if current_user.is_anonymous == False:
+            current_user.fb_id = fb_id
+            current_user.fb_img_url = "https://graph.facebook.com/%s/picture?type=small" % fb_id 
+            print current_user.fb_img_url 
+            model.session.commit()
+            model.session.refresh()
         return redirect(url_for("browse"))
 
 @app.route("/")
@@ -112,15 +118,26 @@ def view_about():
 @app.route("/browse")
 def browse():
     print session.keys()
-    user_list = User.query.filter_by(approved=True).all()
+    user_list = User.query.all()
     return render_template("browse.html", user_list=user_list)
 
 #Profile displays detailed info for one user and displays their video 
 #TODO fix links for this from profile
 @app.route("/campaign/<int:id>")
 def view_profile(id):
-    user = User.query.get(id)
-    return render_template("campaign.html", user=user)
+    campaign = Campaign.query.get(id)
+    return render_template("campaign.html", campaign=campaign)
+
+@app.route("/campaign/<int:id>/kudos", methods="POST")
+def give_kudos(campaign_id):
+    user_id = current_user.id
+    campaign_id = id 
+    kudos = Kudos(user_id=user_id, campaign_id=campaign_id)
+    model.session.add(kudos)
+    model.session.commit()
+    model.session.refresh()
+
+    return redirect(url_for("view_profile", id=campaign_id))
 
 
 #Create_info is a form which stores information about a user's campaign

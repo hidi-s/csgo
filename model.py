@@ -48,6 +48,7 @@ class User(Base, UserMixin):
         password = password.encode("utf-8")
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
+
 class Campaign(Base):
     __tablename__ = "campaigns"
     id = Column(Integer, primary_key=True)
@@ -60,6 +61,9 @@ class Campaign(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship(User, backref=backref("campaigns", uselist=True))
     approved = Column(Boolean, default=False)
+    def kudoses_count(self):
+        return len(self.kudoses) 
+
 
 class Supporters(Base):
     __tablename__ = "supporters"
@@ -84,15 +88,31 @@ class Comments(Base):
 
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     campaign = relationship("Campaign", backref=backref("comments", uselist=True))
+
+
+class Kudoses(Base):
+    __tablename__ = "kudoses"
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", backref="kudoses")
+
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
+    campaign = relationship("Campaign", backref=backref("kudoses", uselist=True))
+
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+
+
+
     
 
 #Now can say user.campaign.supporters. 
 
 
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
-# def create_tables():
+def create_tables():
 #     Base.metadata.drop_all(engine)
-#     Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
  
 if __name__ == "__main__":

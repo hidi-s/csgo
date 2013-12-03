@@ -11,6 +11,7 @@
 	 	<div class="col-md-4">
 			<p><span><a href="/campaign/{{user.id}}"><img src="./static/images/{{user.img_2}}" class="img-thumbnail" </a></span></p>
 			<h3>{{user.first_name}} {{user.last_name}}</h3> 
+			
 			{%- endfor -%}
 		</div> 
 		</div> 
@@ -27,16 +28,4 @@
 
 
 {% endblock %}
-{#
-<!-- <h2>{{user.campaign.linkedin}} {{user.campaign.github}} {{user.campaign.twitter}} </h2> -->
-<!-- {% for user in user_list %}
-	{% for campaign in campaign_list %}
-    <a href="/campaign/{{campaign.id}}"><img src="../static/images/{{campaign.id}}.png"></a>
-{% endfor %} -->
 
-
-    <!-- <h2>{{user.first_name}} {{user.last_name}} </h2>
-    <h2>{{user.goal}} </h2> -->
-    <!--  -->
-   <!--  <h2>{{user.deadline_date}} </h2> -->
-   #}
