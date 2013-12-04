@@ -128,14 +128,20 @@ def view_profile(id):
     campaign = Campaign.query.get(id)
     return render_template("campaign.html", campaign=campaign)
 
+@app.route("/campaign/<int:id>/kudos")
+def before_kudos(campaign_id): 
+   return render_template("/campaign/<int:id>/kudos")
+
 @app.route("/campaign/<int:id>/kudos", methods="POST")
 def give_kudos(campaign_id):
-    user_id = current_user.id
-    campaign_id = id 
-    kudos = Kudos(user_id=user_id, campaign_id=campaign_id)
-    model.session.add(kudos)
-    model.session.commit()
-    model.session.refresh()
+    if request.form['btn'] == "kudos": 
+        print kudos
+        user_id = current_user.id
+        campaign_id = id 
+        kudos = Kudos(user_id=user_id, campaign_id=campaign_id)
+        model.session.add(kudos)
+        model.session.commit()
+        model.session.refresh()
 
     return redirect(url_for("view_profile", id=campaign_id))
 

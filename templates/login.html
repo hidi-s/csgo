@@ -14,7 +14,7 @@
 						<label for"password">Password</label> 
 					    <input type="password" class="form-control" name="password" placeholder="Password"><br>
 					</div>
-					<button type="submit" value="login" name="btn" class="btn btn-dfault">Submit</button>  
+					<button type="submit" value="login" name="btn" class="btn btn-primary" id="submit_button">Submit</button>  
 				</form>
 			</div> 
 
@@ -36,7 +36,7 @@
 					    <label for="last_name">Last Name</label><br> 
 					    <input type="text" class="form-control" name="last_name" placeholder="Last Name"><br>
 				   	</div>
-					<button type="submit" value="register" name="btn" class="btn btn-dfault">Register</button
+					<button type="submit" value="register" name="btn" class="btn btn-primary" id="submit_button">Register</button
 				</form>
 			</div> 
 
@@ -58,19 +58,7 @@
 
 <script>
 
-    FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-           FB.api("/me/picture?width=180&height=180", function(response) {
-               var fbPic = response.data.url;
-               img = $("img#fb-prof-pic");
-               img.attr("src", fbPic);
-           });
-        } else {
-            console.log('nada.');
-        }
-    });
-
-
+   
 
 </script> 
 

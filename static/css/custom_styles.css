@@ -1,5 +1,5 @@
 .img-thumbnail {
-	max-width: 100%;
+	width: 100%;
 
 }
 
@@ -7,4 +7,34 @@
 
 	background-color: rgb(233, 233, 233);
 	padding-right: 30px;
+}
+
+#browse_name {
+
+	text-align: center; 
+}
+
+#kudos_button {
+
+	width: 200px;
+}
+
+#submit_button {
+
+	width: 100%;
+
+}
+
+.index_bg {
+	background-image: url('../static/img/bitcoin_bg.jpg');
+}
+
+#landing_text {
+	background: black;
+	color: grey; 
+	width: 100%; 
+}
+
+#navbar_custom {
+	background: black; 
 }
