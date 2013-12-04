@@ -6,7 +6,7 @@
 #campaign_page {
 
 	background-color: rgb(233, 233, 233);
-	padding-right: 30px;
+	padding: 15px;
 }
 
 #browse_name {
@@ -33,6 +33,7 @@
 	background: black;
 	color: grey; 
 	width: 100%; 
+	padding: 15px;
 }
 
 #navbar_custom {
@@ -42,4 +43,13 @@
 #landing_btc {
 	width: 40px;
 	height: 40px;
+}
+
+#github_button {
+	width: 200px;
+} 
+
+#btc_image {
+	width: 220px;
+	height: 220px;
 }
