@@ -111,7 +111,7 @@ class Kudoses(Base):
 
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
 def create_tables():
-#     Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
  

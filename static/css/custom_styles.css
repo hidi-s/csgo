@@ -1,4 +1,10 @@
 .img-thumbnail {
-	width: 100px;
+	max-width: 100%;
 
+}
+
+#campaign_page {
+
+	background-color: rgb(233, 233, 233);
+	padding-right: 30px;
 }

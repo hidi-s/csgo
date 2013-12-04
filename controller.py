@@ -64,7 +64,7 @@ def authenticate():
         form_login = forms.LoginForm(request.form)
         if not form_login.validate():
             flash("Incorrect username or password") 
-            return render_template("base.html")
+            return render_template("create_info")
 
         email = form_login.email.data
         password = form_login.password.data
@@ -77,7 +77,7 @@ def authenticate():
 
         login_user(user)
 
-        return redirect(request.args.get("next", url_for("index")))
+        return redirect(request.args.get("next", url_for("browse")))
 
     elif request.form['btn'] == "register": 
         password = request.form.get("password")
@@ -91,7 +91,7 @@ def authenticate():
         model.session.add(new_user)
         model.session.commit()
 
-        return redirect(url_for("browse"))
+        return redirect(url_for("create_info"))
 
     elif request.form['btn'] == "fb_login":
         fb_name = request.form.get("name")
