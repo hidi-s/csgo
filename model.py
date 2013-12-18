@@ -1,6 +1,7 @@
 import config
 import bcrypt
 from datetime import datetime
+import time
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, ForeignKey
@@ -35,9 +36,11 @@ class User(Base, UserMixin):
     linkedin = Column(String(128), nullable=True)
     github = Column(String(128), nullable=True)
     twitter = Column(String(128), nullable=True)
-    img_2 = Column(String(128), nullable=True)
+    img = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     approved = Column(Boolean, default=False)
+    campaign = relationship("Campaign", uselist=False)
+    kudoses = relationship("Kudoses", uselist=True)
   
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -53,17 +56,61 @@ class Campaign(Base):
     __tablename__ = "campaigns"
     id = Column(Integer, primary_key=True)
     video = Column(String(128))
-    deadline_date = Column(String(128))
+    deadline = Column(DateTime, nullable=False, default=datetime.now)
+    #Float for money/bitcoin fractions?
     goal = Column(Integer, nullable=True)
     tagline = Column(String(128), nullable=True)
     description = Column(String(128), nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship(User, backref=backref("campaigns", uselist=True))
     approved = Column(Boolean, default=False)
-    def kudoses_count(self):
-        return len(self.kudoses) 
+    kudoses = relationship("Kudoses", uselist=True)
+    user = relationship("User", backref="user")
 
+    def time_remaining(self, currentDate):
+        # remaining = self.deadline - currentDate
+        remaining = self.deadline - datetime(2013, 12, 16)
+        days = remaining.days
+        if days <= 0:
+            return "Completed"
+        if days == 1:
+            return remaining.seconds
+        return days
+
+    def numKudoses(self):
+        return len(self.kudoses)
+
+    def addKudos(self, user_id):
+        if user_id == None:
+            return False
+
+        for kudos in self.kudoses:
+            if kudos.user_id == user_id:
+                return False
+
+        newKudos = Kudoses(campaign_id=self.id, user_id=user_id)
+        session.add(newKudos)
+        session.commit()
+        return True
+
+    def hasKudosed(self, user_id):
+        if user_id == None:
+            return False
+        for kudos in self.kudoses:
+            if kudos.user_id == user_id:
+                return True
+        return False
+
+    def removeKudos(self, user_id):
+        delKudo = Kudoses.query.filter_by(user_id=user_id).one()
+        session.delete(delKudo)
+        session.commit()
+
+class Kudoses(Base):
+    __tablename__ = "kudoses"
+    id = Column(Integer, primary_key=True)
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
 
 class Supporters(Base):
     __tablename__ = "supporters"
@@ -89,32 +136,29 @@ class Comments(Base):
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     campaign = relationship("Campaign", backref=backref("comments", uselist=True))
 
-
-class Kudoses(Base):
-    __tablename__ = "kudoses"
-    id = Column(Integer, primary_key=True)
-
-    user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", backref="kudoses")
-
-    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
-    campaign = relationship("Campaign", backref=backref("kudoses", uselist=True))
-
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-
-
-
-    
-
-#Now can say user.campaign.supporters. 
-
-
 # This creates the tables. drop_all is a hack to delete tables and recreate them. Needs a more permanent solution. 
 def create_tables():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
+def seed():
+    user = User(email="dslevi12@gmail.com", first_name="Danielle", last_name="Levi", 
+        linkedin="www.linkedin.com/in/dslevi/", github="https://github.com/dslevi", 
+        twitter="https://twitter.com/DaniSLevi", img=None)
+    user.set_password('python')
+    session.add(user)
+
+    camp = Campaign(video="http://www.youtube.com/watch?feature=player_detailpage&v=0byNU3RHhr8",
+        goal=500, tagline="I want to learn how to program", description="I am a super cool programmer.",
+        user_id=user.id)
+
+    user.campaign = camp
+    session.add(camp)
+    session.add(user)
+
+    session.commit()
  
 if __name__ == "__main__":
     create_tables()
+    seed()
 

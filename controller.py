@@ -9,6 +9,7 @@ import model
 import os 
 import random
 import string 
+import datetime
 
 
 app = Flask(__name__)
@@ -51,7 +52,9 @@ def load_user(user_id):
 @app.route("/logout")
 @login_required
 def logout():
+    #What doese logout user do?
     logout_user()
+    session.clear()
     return redirect(url_for("index"))
 
 @app.route("/login")
@@ -76,7 +79,7 @@ def authenticate():
             return render_template("login.html")
 
         login_user(user)
-
+        session["user_id"] = user.id
         return redirect(request.args.get("next", url_for("browse")))
 
     elif request.form['btn'] == "register": 
@@ -105,8 +108,6 @@ def authenticate():
 
 @app.route("/")
 def index():
-    # testvar = request.args.get("arg", "empty")
-    # print testvar   
     return render_template("index.html")
 
 
@@ -114,37 +115,40 @@ def index():
 def view_about():
     return render_template("about.html")
 
-#Browse displays basic info for all users, including their phot
+#Browse displays basic info for all users, including their photo
+#users are not displayed in a consistent order
 @app.route("/browse")
 def browse():
-    print session.keys()
     user_list = User.query.all()
     return render_template("browse.html", user_list=user_list)
 
-#Profile displays detailed info for one user and displays their video 
-#TODO fix links for this from profile
+#Users only allowed to have one campaign? Using user.id instead of campaign.id
+#(perhaps hash campaign number for privacy)
+#Created this way, user and campaign must be created at same time in order, if you just switch to campaign.id
+#Need to query for this user's campaign
+
 @app.route("/campaign/<int:id>")
 def view_profile(id):
     campaign = Campaign.query.get(id)
-    return render_template("campaign.html", campaign=campaign)
+    if session.get('user_id'):
+        user_id = session['user_id']
+    else:
+        user_id = None
+    return render_template("campaign.html", campaign=campaign, now=datetime.datetime.today(), user_id=user_id)
 
-@app.route("/campaign/<int:id>/kudos")
-def before_kudos(campaign_id): 
-   return render_template("/campaign/<int:id>/kudos")
-
-@app.route("/campaign/<int:id>/kudos", methods="POST")
-def give_kudos(campaign_id):
-    if request.form['btn'] == "kudos": 
-        print kudos
-        user_id = current_user.id
-        campaign_id = id 
-        kudos = Kudos(user_id=user_id, campaign_id=campaign_id)
-        model.session.add(kudos)
+#Change this into an AJAX call
+#Really weird bug, changes font size after kudosing
+@app.route("/campaign/<int:id>/kudos", methods=["POST"])
+def give_kudos(id):
+    if session.get('user_id'):
+        campaign = Campaign.query.get(id)
+        action = request.form.get("kudos_button")
+        if action == "Give Kudos":
+            campaign.addKudos(session['user_id'])
+        else:
+            campaign.removeKudos(session['user_id'])
         model.session.commit()
-        model.session.refresh()
-
-    return redirect(url_for("view_profile", id=campaign_id))
-
+    return redirect(url_for("view_profile", id=id))
 
 #Create_info is a form which stores information about a user's campaign
 @app.route("/create_info")
@@ -199,21 +203,6 @@ def post_create_info():
         print "no image"
 
     return redirect(url_for("browse"))
-
-
-
-
-    # else: 
-        # return render_template(url_for("create_profile")
-    # print request.form.get("video_url")
-    # print request.form.get("tagline")
-    # print request.form.get("description")
-    # print request.form.get("goal")
-    # print request.form.get("twitter")
-    # print request.form.get("github")
-    # print request.form.get("linkedin")
-    # print request.form.get("deadline")
-    # print request.form.get("img_1")
    
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

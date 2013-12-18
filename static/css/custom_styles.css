@@ -1,6 +1,26 @@
+#login_email{
+	color:rgb(119, 119, 119);
+}
+
 .img-thumbnail {
 	width: 100%;
 
+}
+
+#CS{
+	color:rgb(250, 154, 11);
+}
+
+#CS:hover{
+	color:rgb(255, 187, 10);
+}
+
+#Bit{
+	color:white;
+}
+
+#Bit:hover{
+	color:rgb(202, 198, 198);
 }
 
 #campaign_page {
