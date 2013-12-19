@@ -24,7 +24,22 @@ session = scoped_session(sessionmaker(bind=engine,
 Base = declarative_base()
 Base.query = session.query_property()
 
-# Validation lives here. The user table contains email and password info. User information about their campaign also lives here. 
+class Admin(Base):
+    __tablename__ = "admins"
+    id = Column(Integer, primary_key=True)
+    username = Column(String(64), nullable=False)
+    password = Column(String(64), nullable=False)
+    salt = Column(String(64), nullable=False)
+
+    def set_password(self, password):
+        self.salt = bcrypt.gensalt()
+        password = password.encode("utf-8")
+        self.password = bcrypt.hashpw(password, self.salt)
+
+    def authenticate(self, password):
+        password = password.encode("utf-8")
+        return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
+
 class User(Base, UserMixin):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
@@ -36,7 +51,7 @@ class User(Base, UserMixin):
     linkedin = Column(String(128), nullable=True)
     github = Column(String(128), nullable=True)
     twitter = Column(String(128), nullable=True)
-    img = Column(String(128), nullable=True)
+    img = Column(String(128), default="default.jpg")
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     approved = Column(Boolean, default=False)
     campaign = relationship("Campaign", uselist=False)
@@ -50,7 +65,6 @@ class User(Base, UserMixin):
     def authenticate(self, password):
         password = password.encode("utf-8")
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
-
 
 class Campaign(Base):
     __tablename__ = "campaigns"
@@ -69,13 +83,14 @@ class Campaign(Base):
 
     def time_remaining(self, currentDate):
         # remaining = self.deadline - currentDate
-        remaining = self.deadline - datetime(2013, 12, 16)
+        #debugging one day countdown
+        remaining = self.deadline - datetime(2013, 12, 17)
         days = remaining.days
         if days <= 0:
-            return "Completed"
+            return [0, "Completed"]
         if days == 1:
-            return remaining.seconds
-        return days
+            return [1, remaining.seconds]
+        return [0, days]
 
     def numKudoses(self):
         return len(self.kudoses)
@@ -144,7 +159,7 @@ def create_tables():
 def seed():
     user = User(email="dslevi12@gmail.com", first_name="Danielle", last_name="Levi", 
         linkedin="www.linkedin.com/in/dslevi/", github="https://github.com/dslevi", 
-        twitter="https://twitter.com/DaniSLevi", img=None)
+        twitter="https://twitter.com/DaniSLevi", img="danielle.jpg")
     user.set_password('python')
     session.add(user)
 
@@ -153,8 +168,18 @@ def seed():
         user_id=user.id)
 
     user.campaign = camp
+
     session.add(camp)
     session.add(user)
+
+    admin1 = Admin(username="dslevi")
+    admin1.set_password('master')
+
+    admin2 = Admin(username="hidi")
+    admin2.set_password('hackbright')
+
+    session.add(admin1)
+    session.add(admin2)
 
     session.commit()
  

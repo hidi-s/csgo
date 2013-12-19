@@ -9,7 +9,7 @@ import model
 import os 
 import random
 import string 
-import datetime
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -25,24 +25,24 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 #Testing upload functionality 
-@app.route("/upload", methods=["POST", "GET"])
-def upload():
-    if request.method == "POST" and 'image' in request.files:
-        print "saving image"
-        filename = images.save(request.files['image'])
-    elif request.method == "POST" :
-        print "no image on request"
-    else:
-        print "render uploads"
-        return render_template("upload.html")
+# @app.route("/upload", methods=["POST", "GET"])
+# def upload():
+#     if request.method == "POST" and 'image' in request.files:
+#         print "saving image"
+#         filename = images.save(request.files['image'])
+#     elif request.method == "POST" :
+#         print "no image on request"
+#     else:
+#         print "render uploads"
+#         return render_template("upload.html")
     
-    return redirect(url_for("browse"))
+#     return redirect(url_for("browse"))
 
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'],
-                               filename)
+# @app.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'],
+#                                filename)
 
 #login and logout stuff here
 @login_manager.user_loader
@@ -52,7 +52,7 @@ def load_user(user_id):
 @app.route("/logout")
 @login_required
 def logout():
-    #What doese logout user do?
+    #What does logout user do?
     logout_user()
     session.clear()
     return redirect(url_for("index"))
@@ -94,7 +94,8 @@ def authenticate():
         model.session.add(new_user)
         model.session.commit()
 
-        return redirect(url_for("create_info"))
+        session['user_id'] = new_user.id
+        return redirect(url_for("browse"))
 
     elif request.form['btn'] == "fb_login":
         fb_name = request.form.get("name")
@@ -134,7 +135,7 @@ def view_profile(id):
         user_id = session['user_id']
     else:
         user_id = None
-    return render_template("campaign.html", campaign=campaign, now=datetime.datetime.today(), user_id=user_id)
+    return render_template("campaign.html", campaign=campaign, now=datetime.today(), user_id=user_id)
 
 #Change this into an AJAX call
 #Really weird bug, changes font size after kudosing
@@ -155,9 +156,12 @@ def give_kudos(id):
 def create_info():
     return render_template("create_info2.html")
 
-@app.route("/create_info", methods=["POST"])
+@app.route("/create_info", methods=["POST", "GET"])
 def post_create_info():
-    # if current_user.is_anonymous == True: 
+    if not session.get('user_id'):
+        flash("Please sign in to create a campaign")
+        return redirect(url_for('login'))
+
     user_id = session.get('user_id')
     video = request.form.get("video_url")
     tagline = request.form.get("tagline")
@@ -166,43 +170,38 @@ def post_create_info():
     twitter = request.form.get("twitter")
     github = request.form.get("github")
     linkedin = request.form.get("linkedin")
-    deadline_date = request.form.get("deadline")
-    # strftime for deadline 
-
-    print "user_id", session.get("user_id")
-
+    deadline = request.form.get("deadline")
+ 
     campaign = Campaign(
         video=video,
         user_id=user_id,
         description=description,
         goal=goal,
-        deadline_date=deadline_date,
-        tagline=tagline
+        deadline=datetime.strptime(deadline, "%Y-%m-%d"),
         )
-    print campaign.video 
+
     model.session.add(campaign)
     model.session.commit()
-    print campaign 
-    model.session.refresh(campaign)
-    print campaign 
+
+    user = User.query.get(user_id)
 
     if 'image' in request.files:
         random_string = ''.join(random.sample(string.letters,5))
-        image_id = "%s.jpg" % random_string
-        print image_id
+        image_id = "%s.jpg" %(random_string)
+     
         filename = images.save(request.files['image'], folder=None, name=image_id) 
         print "saving image"
-        print current_user 
-           #SAVE THE FILENAME AS THE USER ID. 
-        current_user.img_2 = image_id  
-        model.session.add(current_user)
-        model.session.commit()
-        print filename 
-        print session.get('user_id')
-    else:
-        print "no image"
+        
+        user.img = image_id
+
+    user.tagline=tagline
+    user.twitter=twitter
+    user.github=github
+    user.linkedin=linkedin
+    model.session.commit()
 
     return redirect(url_for("browse"))
+
    
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

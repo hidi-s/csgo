@@ -11,6 +11,10 @@
 	color:rgb(250, 154, 11);
 }
 
+#thumbnail{
+	border-radius: 100%;
+}
+
 #CS:hover{
 	color:rgb(255, 187, 10);
 }

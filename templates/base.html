@@ -144,7 +144,6 @@ $( "#fb_logout" ).bind( "click", function() {
 
     {% if current_user.is_anonymous() %}  
         <li><a href="{{url_for("login")}}">Log In</a></li>
-        <li><a href="{{url_for("login")}}">Register</a></li>
     {% else %}
         <li><a href="{{url_for("logout")}}">Log Out</a></li>
         <li><p id="login_email"><small>Logged in as {{current_user.email}}</li></small></p>

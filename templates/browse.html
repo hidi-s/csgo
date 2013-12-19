@@ -20,7 +20,7 @@
 	 	<div class="col-md-3" id="campaign_page">
 	 	
 	 		{%- for user in column -%}
-			<p><span><a href="/campaign/{{user.campaign.id}}"><img src="./static/images/{{user.img}}" class="img-thumbnail" </a></span></p>
+			<div><a href="/campaign/{{user.campaign.id}}"><img id="thumbnail" src="./static/images/{{user.img}}" class="img-thumbnail" </a></div>
 			<h3 id="browse_name">{{user.first_name}} {{user.last_name}}</h3><br>  
 			{%- endfor -%}
  

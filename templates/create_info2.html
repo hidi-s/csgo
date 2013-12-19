@@ -13,7 +13,7 @@
         <div class="col-md-6" id="campaign_page">     
             <h1> Create campaign </h1>
             <h1><small> Tell us more about yourself and your interests. </small></h1><br> 
-            <form role="form" method="POST" action="" enctype=multipart/form-data action="{{url_for('upload')}}">
+            <form method="POST" enctype=multipart/form-data action="{{url_for('post_create_info')}}">
                 <div class="form-group"> 
                     <label for="video_url">Video url</label>
                     <input type="text" class="form-control" name="video_url" placeholder="Video url"><br>
@@ -30,13 +30,12 @@
                     <label for="linkedin">Linkedin</label>
                     <input type="text" class="form-control" name="linkedin" placeholder="Linkedin"><br>
                     <label for="deadline">Deadline</label>
-                    <input type="text" class="form-control" name="deadline" placeholder="Deadline"><br>
+                    <input type="date" class="form-control" name="deadline" placeholder="Deadline"><br>
                     <label for="image">Upload campaign image</label>
                     <input type=file name=image><br> 
-                    <button type="button" class="btn btn-primary" type="submit" id="submit_button" value="Upload">Submit</button><br>
-                  
+                    <input type="submit" class="btn btn-primary" id="submit_button" value="Submit"><br>
                 </div> 
-        </form>
+            </form>
         </div>
         <div class="col-md-3"> 
         </div>     

@@ -10,12 +10,11 @@
         	<h1>{{campaign.user.first_name}} {{campaign.user.last_name}}</h1> 
         	<h1><small>{{campaign.tagline}}</small></h1><br> 
         	<iframe width="640" height="360" src="{{campaign.video}}" frameborder="0" allowfullscreen></iframe><br> 
-	        	<br> 
-	        	<div style = "width: 640">
-        			<p class="lead">{{campaign.description}}</p><br> 
-        			<img class="img-thumbnail" src="../static/images/{{campaign.user.img}}">
-        		</div> 
-    		
+        	<br> 
+        	<div style = "width: 640">
+    			<p class="lead">{{campaign.description}}</p><br> 
+    			<img class="img-thumbnail" src="../static/images/{{campaign.user.img}}">
+    		</div> 
     	</div>
 
         <div class="col-md-1" >     
@@ -23,7 +22,7 @@
 
     	<div class="col-md-3" id="campaign_page">
     		<h2>${{campaign.goal}}</h2><p>Goal</p> 
-    		<h2>{{campaign.time_remaining(now)}}</h2><p>Days left to fund</p> 
+    		<h2 id="remaining_time"><span id="timer"></span></h2><p>Days left to fund</p> 
     		<h2>{{campaign.numKudoses()}}</h2><p>Kudoses</p><br> 
 
  			<a class="coinbase-button" data-code="8e3abf862758a9836c7f0e98dd5c6aca" data-button-style="custom_large" class="btn btn-lg btn-block" data-custom="USER1" href="https://coinbase.com/checkouts/8e3abf862758a9836c7f0e98dd5c6aca">Donate Bitcoins</a><br>
@@ -40,16 +39,60 @@
 		    
 		    
 		    <!-- Put comments here, with comme -->
-	 
+<!-- 	 
   <script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
-
+ -->
 <script type="text/javascript">
 
     $(document).ready(function(){
-        if ({{user_id}}) {
+        if ({{user_id | tojson | safe}}) {
             if ({{campaign.hasKudosed(user_id) | tojson | safe}}) {
                 document.getElementById('kudos_button').value = "Un-Kudos";
             }
+        }
+        var time = {{campaign.time_remaining(now) | tojson | safe}};
+        if (time[0] == 0) {
+            document.getElementById('remaining_time').innerHTML = time[1];
+        } else {
+            
+            var Timer;
+            var TotalSeconds;
+
+            function Tick() {
+                if (TotalSeconds <= 0) {
+                    return;
+                }
+
+                TotalSeconds -= 1;
+                UpdateTimer()
+                window.setTimeout("Tick()", 1000);
+            }
+
+            function CreateTimer(TimerID, Time) {
+                Timer = document.getElementById(TimerID);
+                TotalSeconds = Time;
+
+                UpdateTimer();
+
+                window.setTimeout("Tick()", 1000);
+            }
+
+            function UpdateTimer() {
+                var Seconds = TotalSeconds;
+                var Minutes = Math.floor(Seconds/60);
+                var Hours = Math.floor(Minutes/60);
+                Seconds -= (Minutes * 60);
+                Minutes -= (Hours * 60);
+
+                var TimeStr = Hours + ":" + LeadingZero(Minutes) + ":" + LeadingZero(Seconds);
+                Timer.innerHTML = TimeStr;
+            }
+
+            function LeadingZero(Time) {
+                return (Time < 10) ? "0" + Time : Time;
+            }
+
+            CreateTimer("timer", time[1]);
         }
     });
 
