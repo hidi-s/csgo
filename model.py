@@ -56,7 +56,7 @@ class User(Base, UserMixin):
     approved = Column(Boolean, default=False)
     campaign = relationship("Campaign", uselist=False)
     kudoses = relationship("Kudoses", uselist=True)
-    supporters = relationship("Supporter", uselist=True)
+    supporters = relationship("Supporters", uselist=True)
     campaignCreator = Column(Boolean, default=True)
   
     def set_password(self, password):
@@ -82,7 +82,7 @@ class Campaign(Base):
     approved = Column(Boolean, default=False)
     kudoses = relationship("Kudoses", uselist=True)
     user = relationship("User", backref="user")
-    supporting = relationship("Supporter", uselist=True)
+    supporting = relationship("Supporters", uselist=True)
 
     def time_remaining(self, currentDate):
         remaining = self.deadline - currentDate
@@ -128,7 +128,7 @@ class Kudoses(Base):
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
 
-class Supporter(Base):
+class Supporters(Base):
     __tablename__ = "supporters"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
