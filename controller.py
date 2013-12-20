@@ -91,10 +91,14 @@ def authenticate():
         new_user.set_password(password=password)
         new_user.first_name=first_name
         new_user.last_name=last_name
+        creator = bool(request.form.get("role"))
+        new_user.campaignCreator=creator
         model.session.add(new_user)
         model.session.commit()
 
         session['user_id'] = new_user.id
+        if creator:
+            return redirect(url_for("create_info"))
         return redirect(url_for("browse"))
 
     elif request.form['btn'] == "fb_login":
@@ -117,16 +121,10 @@ def view_about():
     return render_template("about.html")
 
 #Browse displays basic info for all users, including their photo
-#users are not displayed in a consistent order
 @app.route("/browse")
 def browse():
-    user_list = User.query.all()
+    user_list = User.query.filter_by(campaignCreator=True).all()
     return render_template("browse.html", user_list=user_list)
-
-#Users only allowed to have one campaign? Using user.id instead of campaign.id
-#(perhaps hash campaign number for privacy)
-#Created this way, user and campaign must be created at same time in order, if you just switch to campaign.id
-#Need to query for this user's campaign
 
 @app.route("/campaign/<int:id>")
 def view_profile(id):
@@ -138,7 +136,6 @@ def view_profile(id):
     return render_template("campaign.html", campaign=campaign, now=datetime.today(), user_id=user_id)
 
 #Change this into an AJAX call
-#Really weird bug, changes font size after kudosing
 @app.route("/campaign/<int:id>/kudos", methods=["POST"])
 def give_kudos(id):
     if session.get('user_id'):
@@ -156,7 +153,7 @@ def give_kudos(id):
 def create_info():
     return render_template("create_info2.html")
 
-@app.route("/create_info", methods=["POST", "GET"])
+@app.route("/create_info", methods=["POST"])
 def post_create_info():
     if not session.get('user_id'):
         flash("Please sign in to create a campaign")

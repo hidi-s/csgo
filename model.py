@@ -56,6 +56,8 @@ class User(Base, UserMixin):
     approved = Column(Boolean, default=False)
     campaign = relationship("Campaign", uselist=False)
     kudoses = relationship("Kudoses", uselist=True)
+    supporters = relationship("Supporter", uselist=True)
+    campaignCreator = Column(Boolean, default=True)
   
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -80,11 +82,10 @@ class Campaign(Base):
     approved = Column(Boolean, default=False)
     kudoses = relationship("Kudoses", uselist=True)
     user = relationship("User", backref="user")
+    supporting = relationship("Supporter", uselist=True))
 
     def time_remaining(self, currentDate):
-        # remaining = self.deadline - currentDate
-        #debugging one day countdown
-        remaining = self.deadline - datetime(2013, 12, 17)
+        remaining = self.deadline - currentDate
         days = remaining.days
         if days <= 0:
             return [0, "Completed"]
@@ -127,15 +128,11 @@ class Kudoses(Base):
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
 
-class Supporters(Base):
+class Supporter(Base):
     __tablename__ = "supporters"
     id = Column(Integer, primary_key=True)
-
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", backref="supported")
-
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
-    campaign = relationship("Campaign", backref=backref("supporters", uselist=True))
 
 class Comments(Base):
     __tablename__ = "comments"
@@ -159,7 +156,7 @@ def create_tables():
 def seed():
     user = User(email="dslevi12@gmail.com", first_name="Danielle", last_name="Levi", 
         linkedin="www.linkedin.com/in/dslevi/", github="https://github.com/dslevi", 
-        twitter="https://twitter.com/DaniSLevi", img="danielle.jpg")
+        twitter="https://twitter.com/DaniSLevi", img="danielle.jpg", campaignCreator=True)
     user.set_password('python')
     session.add(user)
 

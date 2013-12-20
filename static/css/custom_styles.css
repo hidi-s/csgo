@@ -7,6 +7,10 @@
 
 }
 
+input[type="radio"] {
+	margin: 0px 10 15;
+}
+
 #CS{
 	color:rgb(250, 154, 11);
 }

@@ -22,7 +22,7 @@
 
     	<div class="col-md-3" id="campaign_page">
     		<h2>${{campaign.goal}}</h2><p>Goal</p> 
-    		<h2 id="remaining_time"><span id="timer"></span></h2><p>Days left to fund</p> 
+    		<h2 id="remaining_time"><span id="timer"></span></h2><p id="time_label">Days left to fund</p> 
     		<h2>{{campaign.numKudoses()}}</h2><p>Kudoses</p><br> 
 
  			<a class="coinbase-button" data-code="8e3abf862758a9836c7f0e98dd5c6aca" data-button-style="custom_large" class="btn btn-lg btn-block" data-custom="USER1" href="https://coinbase.com/checkouts/8e3abf862758a9836c7f0e98dd5c6aca">Donate Bitcoins</a><br>
@@ -50,7 +50,9 @@
                 document.getElementById('kudos_button').value = "Un-Kudos";
             }
         }
+
         var time = {{campaign.time_remaining(now) | tojson | safe}};
+        
         if (time[0] == 0) {
             document.getElementById('remaining_time').innerHTML = time[1];
         } else {
@@ -65,7 +67,7 @@
 
                 TotalSeconds -= 1;
                 UpdateTimer()
-                window.setTimeout("Tick()", 1000);
+                window.setTimeout(function(){Tick();}, 1000);
             }
 
             function CreateTimer(TimerID, Time) {
@@ -74,7 +76,7 @@
 
                 UpdateTimer();
 
-                window.setTimeout("Tick()", 1000);
+                window.setTimeout(function(){Tick();}, 1000);
             }
 
             function UpdateTimer() {
@@ -93,6 +95,7 @@
             }
 
             CreateTimer("timer", time[1]);
+            document.getElementById("time_label").innerHTML = "Hours left to fund";
         }
     });
 
