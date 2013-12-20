@@ -82,7 +82,7 @@ class Campaign(Base):
     approved = Column(Boolean, default=False)
     kudoses = relationship("Kudoses", uselist=True)
     user = relationship("User", backref="user")
-    supporting = relationship("Supporter", uselist=True))
+    supporting = relationship("Supporter", uselist=True)
 
     def time_remaining(self, currentDate):
         remaining = self.deadline - currentDate
