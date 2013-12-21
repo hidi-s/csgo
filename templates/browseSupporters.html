@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container-fluid" >
+    <div class="row">
+         <div class="col-md-1">
+        </div> 
+        <div class="col-md-9"> 
+        <h1>Browse supporters.</h1> 
+        <h1><small>Learn more about supporters and their interests.</small></h1><br> 
+    </div> 
+    </div> 
+
+    <div class="row">
+        <div class="col-md-1">
+        </div> 
+
+
+        {% for row in supporters | sort | slice(3) %}
+        <div class="col-md-3" id="campaign_page">
+            <div class="profile_link">
+                {%- for user in row -%}
+                    <div><a href="/supporter/{{user.id}}"><img id="thumbnail" src="./static/images/{{user.img}}" class="img-thumbnail" ></a></div>
+                    <h3 id="browse_name">{{user.first_name}} {{user.last_name}}</h3><br>  
+                {%- endfor -%}
+            </div>
+        </div> 
+
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}

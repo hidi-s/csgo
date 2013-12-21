@@ -2,7 +2,8 @@ from flask import Flask, render_template, redirect, request, g, session, url_for
 from model import User, Campaign, Supporters, Comments 
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
-from flask.ext.uploads import UploadSet, configure_uploads, IMAGES 
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from flask.ext.mail import Mail, Message 
 import config
 import forms
 import model
@@ -14,7 +15,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config.from_object(config)
-
+mail = Mail(app)
 
 images = UploadSet('images', IMAGES)
 configure_uploads(app, (images))
@@ -183,11 +184,13 @@ def post_create_info():
     user = User.query.get(user_id)
 
     if 'image' in request.files:
+
+        print request.files['image']
+
         random_string = ''.join(random.sample(string.letters,5))
         image_id = "%s.jpg" %(random_string)
      
         filename = images.save(request.files['image'], folder=None, name=image_id) 
-        print "saving image"
         
         user.img = image_id
 
@@ -199,6 +202,45 @@ def post_create_info():
 
     return redirect(url_for("browse"))
 
-   
+@app.route("/forgotpassword")
+def forgotPassword():
+    return render_template("recoverPassword.html")
+
+@app.route("/recovery", methods=["POST"])
+def recoverPassword():
+    email = request.form.get("email")
+    if email == "":
+        #fix flash formatting, so its centered
+        flash("Please enter email address")
+        return redirect(url_for("forgotPassword"))
+    valid = User.query.filter_by(email=email).all()
+    if not valid:
+        flash("Sorry, that email is not registered.")
+        return redirect(url_for("forgotPassword"))
+    user = valid[0]
+    msg = Message("Reset CS:Go Password",
+        sender= ("CS:Go", "dslevi12@gmail.com"),
+        recipients=[email])
+    msg.body = """Hi %s,\n
+        Forgot your password?\n
+        Please click on this link to reset it.\n
+        Love,\n
+        CS:Go""" % (user.first_name)
+    msg.html = 'body'
+    with app.app_context():
+        mail.send(msg)
+    flash("Please check your inbox for instructions to reset your password.")
+    return redirect(url_for("login"))
+
+@app.route("/browseSupporters")
+def browseSupporters():
+    supporters = User.query.filter_by(campaignCreator=False)
+    return render_template("browseSupporters.html", supporters=supporters)
+
+@app.route("/supporter/<supporter_id>")
+def display_supporter(supporter_id):
+    supporter = User.query.filter_by(id=supporter_id).one()
+    return render_template("supporters.html", supporter=supporter)
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

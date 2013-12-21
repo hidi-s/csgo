@@ -13,7 +13,7 @@
         	<br> 
         	<div style = "width: 640">
     			<p class="lead">{{campaign.description}}</p><br> 
-    			<img class="img-thumbnail" src="../static/images/{{campaign.user.img}}">
+    			<img class="img-thumbnail" src="./static/images/{{campaign.user.img}}">
     		</div> 
     	</div>
 
@@ -30,7 +30,7 @@
             <form method="POST" id="kudos_form" action="/campaign/{{campaign.id}}/kudos">
                 <input type="submit" class="btn btn-success btn-lg btn-block" name="kudos_button" id="kudos_button" value="Give Kudos">
             </form>
-            <a href="http://www.github.com/{{campaign.github}}" type="submit" name="btn" class="btn btn btn-info btn-lg btn-block" value="github" id="github_button">Follow On Github</a>
+            <a href="{{campaign.user.github}}" type="submit" name="btn" class="btn btn btn-info btn-lg btn-block" value="github" id="github_button">Follow On Github</a>
  			<br> 
  			<h3>Supporters<h3> 
 	        </div>
@@ -52,51 +52,8 @@
         }
 
         var time = {{campaign.time_remaining(now) | tojson | safe}};
-        
-        if (time[0] == 0) {
-            document.getElementById('remaining_time').innerHTML = time[1];
-        } else {
-            
-            var Timer;
-            var TotalSeconds;
+        document.getElementById('remaining_time').innerHTML = time;
 
-            function Tick() {
-                if (TotalSeconds <= 0) {
-                    return;
-                }
-
-                TotalSeconds -= 1;
-                UpdateTimer()
-                window.setTimeout(function(){Tick();}, 1000);
-            }
-
-            function CreateTimer(TimerID, Time) {
-                Timer = document.getElementById(TimerID);
-                TotalSeconds = Time;
-
-                UpdateTimer();
-
-                window.setTimeout(function(){Tick();}, 1000);
-            }
-
-            function UpdateTimer() {
-                var Seconds = TotalSeconds;
-                var Minutes = Math.floor(Seconds/60);
-                var Hours = Math.floor(Minutes/60);
-                Seconds -= (Minutes * 60);
-                Minutes -= (Hours * 60);
-
-                var TimeStr = Hours + ":" + LeadingZero(Minutes) + ":" + LeadingZero(Seconds);
-                Timer.innerHTML = TimeStr;
-            }
-
-            function LeadingZero(Time) {
-                return (Time < 10) ? "0" + Time : Time;
-            }
-
-            CreateTimer("timer", time[1]);
-            document.getElementById("time_label").innerHTML = "Hours left to fund";
-        }
     });
 
 </script>   

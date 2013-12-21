@@ -11,30 +11,40 @@ input[type="radio"] {
 	margin: 0px 10 15;
 }
 
+#preview_img{
+	visibility: hidden;
+	padding: 10px 0px 0px 10px;
+}
+
 #CS{
 	color:rgb(250, 154, 11);
 }
 
-#thumbnail{
-	border-radius: 100%;
-}
-
-#CS:hover{
-	color:rgb(255, 187, 10);
-}
-
-#Bit{
+#Go{
 	color:white;
 }
 
-#Bit:hover{
-	color:rgb(202, 198, 198);
+#supporter_link {
+	margin-top: -3px;
 }
 
-#campaign_page {
-
+#supporter_page {
 	background-color: rgb(233, 233, 233);
 	padding: 15px;
+	height: 500px;
+	margin-left: -50px;
+}
+
+.profile_link {
+	background-color: rgb(233, 233, 233);
+	padding: 15px;
+	height:340px;
+}
+
+.profile_link:after {
+	background-color: rgb(233, 233, 233);
+	padding: 15px;
+	height:340px;
 }
 
 #browse_name {

@@ -3,11 +3,6 @@
 
 <div class="container-fluid">
     <div class="row">
-
-
-
-<div class="container-fluid">
-    <div class="row">
         <div class="col-md-3"> 
         </div> 
         <div class="col-md-6" id="campaign_page">     
@@ -22,7 +17,7 @@
                     <label for="description">Description</label>
                     <textarea type="text" class="form-control" name="description" placeholder="Description"></textarea><br>
                     <label for="goal">Goal</label>
-                    <input type="text" class="form-control" name="goal" placeholder="$"><br>
+                    <input type="number" class="form-control" name="goal" placeholder="$"><br>
                     <label for="twitter">Twitter</label>
                     <input type="text" class="form-control" name="twitter" placeholder="Twitter"><br>
                     <label for="github">Github</label>
@@ -32,7 +27,8 @@
                     <label for="deadline">Deadline</label>
                     <input type="date" class="form-control" name="deadline" placeholder="Deadline"><br>
                     <label for="image"> Upload campaign image</label>
-                    <input type=file name=image><br>
+                    <input type='file' accept="image/*" id="preview_btn" name=image>
+                    <img id="preview_img" target="_blank" scr="#" alt="Your image"/><br>
                     <input type="submit" class="btn btn-primary" id="submit_button" value="Submit"><br>
                 </div> 
             </form>
@@ -41,5 +37,26 @@
         </div>     
     </div>
 </div>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                document.getElementById('preview_img').style.visibility = "visible";
+                $('#preview_img').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#preview_btn").change(function(){
+        readURL(this);
+    });
+</script>
+
 {% endblock %}
+
 

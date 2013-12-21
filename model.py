@@ -56,7 +56,7 @@ class User(Base, UserMixin):
     approved = Column(Boolean, default=False)
     campaign = relationship("Campaign", uselist=False)
     kudoses = relationship("Kudoses", uselist=True)
-    supporters = relationship("Supporters", uselist=True)
+    supporting = relationship("Supporters", uselist=True)
     campaignCreator = Column(Boolean, default=True)
   
     def set_password(self, password):
@@ -88,10 +88,12 @@ class Campaign(Base):
         remaining = self.deadline - currentDate
         days = remaining.days
         if days <= 0:
-            return [0, "Completed"]
-        if days == 1:
-            return [1, remaining.seconds]
-        return [0, days]
+            return "Completed"
+        return days
+        #Fix this later
+        # if days == 1:
+        #     return [1, remaining.seconds]
+        # return [0, days]
 
     def numKudoses(self):
         return len(self.kudoses)

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>CS:Bit</title>
+        <title>CS:Go</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="../static/css/custom_styles.css" rel="stylesheet" media="screen">
@@ -129,14 +129,15 @@ $( "#fb_logout" ).bind( "click", function() {
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" id="navbar_custom" href={{url_for("index")}}><span id="CS">CS:</span><span id="Bit">Bit</span></a>
+    <a class="navbar-brand" id="navbar_custom" href={{url_for("index")}}><span id="CS">CS:</span><span id="Go">Go</span></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <li><a href="{{url_for("browse")}}">Browse</a></li>
       <li><a href="{{url_for("index")}}">Learn</a></li>
+      <li><a href="{{url_for("browse")}}">Campaigns</a></li>
+      <li><a href="{{url_for("browseSupporters")}}">Supporters</a></li>
       <li><a href="{{url_for("create_info")}}">Create Campaign</a></li>
     </ul>
    
@@ -156,7 +157,7 @@ $( "#fb_logout" ).bind( "click", function() {
         <div class="container">
             <ul>
             {% for message in get_flashed_messages() %}
-            <li>{{message}}</li>
+            <li id="flash_message">{{message}}</li>
             {% endfor %}
             </ul>
             <p>

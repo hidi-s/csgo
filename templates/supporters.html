@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" id="campaign_page">
+            <div style = "width: 360">
+                <img class="img-thumbnail" src="/static/images/{{supporter.img}}">
+            </div> 
+            <h1>{{supporter.first_name}} {{supporter.last_name}}</h1>
+            <h2 id="supporter_link"><small><a href="#">Supporter link</a></small></h2> 
+            <h1><small>Supporter tagline/description</small></h1><br>
+        </div>
+
+        <div class="col-md-1" ></div>  
+
+        <div class="col-md-7" id="supporter_page">
+            <h2>Supporting</h2>
+
+        </div>    
+    </div> 
+
+{% endblock %}
