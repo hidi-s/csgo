@@ -156,14 +156,11 @@ def create_supporter():
 @app.route("/create_supporter", methods=["POST"])
 def process_supporter():
     user_id = session.get('user_id')
-    tagline = request.form.get("tagline")
-    description = request.form.get("description")
-    link = request.form.get("link")
-
-    model.session.add(campaign)
-    model.session.commit()
-
     user = User.query.get(user_id)
+
+    user.tagline = request.form.get("tagline")
+    user.description = request.form.get("description")
+    user.link = request.form.get("link")
 
     if 'image' in request.files:
 
@@ -176,10 +173,6 @@ def process_supporter():
         
         user.img = image_id
 
-    user.tagline=tagline
-    user.twitter=twitter
-    user.github=github
-    user.linkedin=linkedin
     model.session.commit()
 
     return redirect(url_for("browse"))

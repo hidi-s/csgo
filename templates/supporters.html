@@ -5,19 +5,36 @@
     <div class="row">
         <div class="col-md-4" id="campaign_page">
             <div style = "width: 360">
-                <img class="img-thumbnail" src="/static/images/{{supporter.img}}">
-            </div> 
-            <h1>{{supporter.first_name}} {{supporter.last_name}}</h1>
-            <h2 id="supporter_link"><small><a href="#">Supporter link</a></small></h2> 
-            <h1><small>Supporter tagline/description</small></h1><br>
+                <a href="{{supporter.link}}"><img class="img-thumbnail" src="/static/images/{{supporter.img}}"></a>
+            </div>
+            <div id="supporter_div"> 
+                <h1>{{supporter.first_name}} {{supporter.last_name}}</h1>
+                <h2 id="supporter_tagline"><small>{{supporter.tagline}}</small></h2> 
+                <h2><small id="description">{{supporter.description}}</small></h2>
+            </div>
         </div>
 
         <div class="col-md-1" ></div>  
 
         <div class="col-md-7" id="supporter_page">
             <h2>Supporting</h2>
-
+            <div id="supported">
+                {% for row in supporter.supporting | sort | slice(3) %}
+            <div class="col-md-3">
+                
+                    {%- for user in row -%}
+                    <div class="profile_link">
+                        <div><a href="/supporter/{{supporter.supporting.id}}"><img id="thumbnail" src="./static/images/{{supporter.supporting.img}}" class="img-thumbnail" ></a></div>
+                        <h3 id="browse_name">{{supporter.supporting.first_name}} {{supporter.supporting.last_name}}</h3><br>
+                    </div>  
+                    {%- endfor -%}
+    
+            </div>
+        {% endfor %}
+            </div>
         </div>    
-    </div> 
+    </div>
+</div>
+<div id="bottom_padding"></div> 
 
 {% endblock %}

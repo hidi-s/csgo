@@ -58,6 +58,7 @@ class User(Base, UserMixin):
     salt = Column(String(64), nullable=False)
     first_name = Column(String(16), nullable=False)
     last_name = Column(String(24), nullable=False)
+    description = Column(String(128), nullable=True)
     link = Column(String(128), nullable=True)
     linkedin = Column(String(128), nullable=True)
     github = Column(String(128), nullable=True)

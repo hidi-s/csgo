@@ -12,8 +12,9 @@ input[type="radio"] {
 }
 
 #preview_img{
-	visibility: hidden;
+	display: none;
 	padding: 10px 0px 0px 10px;
+	width: 400px;
 }
 
 #CS{
@@ -24,8 +25,16 @@ input[type="radio"] {
 	color:white;
 }
 
-#supporter_link {
+#supporter_tagline {
 	margin-top: -3px;
+}
+
+#description{
+	color:black;
+}
+
+#s_tagline{
+	color: rgb(250, 154, 11);
 }
 
 #supporter_page {
@@ -60,6 +69,10 @@ input[type="radio"] {
 
 .index_bg {
 	background-image: url('../static/img/bitcoin_bg.jpg');
+}
+
+#supporter_div{
+	padding:10px;
 }
 
 #landing_text {
