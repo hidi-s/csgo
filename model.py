@@ -184,6 +184,42 @@ def seed():
 
     session.add(camp)
     session.add(user)
+    session.commit()
+
+    supporter1 = User(email="tester1@gmail.com", first_name="Tester", last_name="One", 
+        link="www.hackbright.com", img="default.jpg", campaignCreator=False)
+    supporter1.set_password('tester')
+    session.add(supporter1)
+
+    supporter2 = User(email="tester2@gmail.com", first_name="Tester", last_name="Two", 
+        link="www.hackbright.com", img="default.jpg", campaignCreator=False)
+    supporter2.set_password('tester')
+    session.add(supporter2)
+
+    supporter3 = User(email="tester3@gmail.com", first_name="Tester", last_name="Three", 
+        link="www.hackbright.com", img="default.jpg", campaignCreator=False)
+    supporter3.set_password('tester')
+    session.add(supporter3)
+
+    supporter4 = User(email="tester4@gmail.com", first_name="Tester", last_name="Four", 
+        link="www.hackbright.com", img="default.jpg", campaignCreator=False)
+    supporter4.set_password('tester')
+    session.add(supporter4)
+
+    session.commit()
+
+    print supporter1.id, camp.id
+    s1 = Supporters(user_id=supporter1.id, campaign_id=camp.id)
+    session.add(s1)
+
+    s2 = Supporters(user_id=supporter2.id, campaign_id=camp.id)
+    session.add(s2)
+
+    s3 = Supporters(user_id=supporter3.id, campaign_id=camp.id)
+    session.add(s3)
+
+    s4 = Supporters(user_id=supporter4.id, campaign_id=camp.id)
+    session.add(s4)
 
     admin1 = Admin(username="dslevi")
     admin1.set_password('master')

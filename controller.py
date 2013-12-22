@@ -127,6 +127,17 @@ def browse():
     user_list = User.query.filter_by(campaignCreator=True).all()
     return render_template("browse.html", user_list=user_list)
 
+def supporter_list(campaign_id):
+    d = {}
+    supporters = Supporters.query.filter_by(campaign_id=campaign_id)
+    for supporter in supporters:
+        user = []
+        u = User.query.filter_by(id=supporter.user_id).one()
+        user.append(u.first_name)
+        user.append(u.last_name)
+        d[u.id] = user
+    return d
+
 @app.route("/campaign/<int:id>")
 def view_profile(id):
     campaign = Campaign.query.get(id)
@@ -134,7 +145,8 @@ def view_profile(id):
         user_id = session['user_id']
     else:
         user_id = None
-    return render_template("campaign.html", campaign=campaign, now=datetime.today(), user_id=user_id)
+    supporters = supporter_list(id)
+    return render_template("campaign.html", campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters)
 
 #Change this into an AJAX call
 @app.route("/campaign/<int:id>/kudos", methods=["POST"])
@@ -266,10 +278,23 @@ def browseSupporters():
     supporters = User.query.filter_by(campaignCreator=False)
     return render_template("browseSupporters.html", supporters=supporters)
 
+def supported_list(user):
+    l =[]
+    supporting = user.supporting
+    for supported in supporting:
+        camp = []
+        c = Campaign.query.filter_by(id=supported.campaign_id).one()
+        u = User.query.get(c.user_id)
+        camp.append(c)
+        camp.append(u)
+        l.append(camp)
+    return l
+
 @app.route("/supporter/<supporter_id>")
 def display_supporter(supporter_id):
     supporter = User.query.filter_by(id=supporter_id).one()
-    return render_template("supporters.html", supporter=supporter)
+    supported = supported_list(supporter)
+    return render_template("supporters.html", supporter=supporter, supported=supported)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
