@@ -24,6 +24,16 @@ session = scoped_session(sessionmaker(bind=engine,
 Base = declarative_base()
 Base.query = session.query_property()
 
+class Contribution(Base):
+    __tablename__ = "contributions"
+    id = Column(Integer, primary_key=True)
+    supporter_id = Column(Integer, ForeignKey("users.id"))
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
+    payment_type = Column(String(64), nullable=False)
+    amount = Column(Integer, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+
+
 class Admin(Base):
     __tablename__ = "admins"
     id = Column(Integer, primary_key=True)
@@ -48,6 +58,7 @@ class User(Base, UserMixin):
     salt = Column(String(64), nullable=False)
     first_name = Column(String(16), nullable=False)
     last_name = Column(String(24), nullable=False)
+    link = Column(String(128), nullable=True)
     linkedin = Column(String(128), nullable=True)
     github = Column(String(128), nullable=True)
     twitter = Column(String(128), nullable=True)
@@ -58,6 +69,7 @@ class User(Base, UserMixin):
     kudoses = relationship("Kudoses", uselist=True)
     supporting = relationship("Supporters", uselist=True)
     campaignCreator = Column(Boolean, default=True)
+    contributions = relationship("Contribution", uselist=True)
   
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -83,6 +95,7 @@ class Campaign(Base):
     kudoses = relationship("Kudoses", uselist=True)
     user = relationship("User", backref="user")
     supporting = relationship("Supporters", uselist=True)
+    contributors = relationship("Contribution", uselist=True)
 
     def time_remaining(self, currentDate):
         remaining = self.deadline - currentDate

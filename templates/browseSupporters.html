@@ -17,19 +17,21 @@
 
 
         {% for row in supporters | sort | slice(3) %}
-        <div class="col-md-3" id="campaign_page">
-            <div class="profile_link">
-                {%- for user in row -%}
-                    <div><a href="/supporter/{{user.id}}"><img id="thumbnail" src="./static/images/{{user.img}}" class="img-thumbnail" ></a></div>
-                    <h3 id="browse_name">{{user.first_name}} {{user.last_name}}</h3><br>  
-                {%- endfor -%}
+            <div class="col-md-3">
+                
+                    {%- for user in row -%}
+                    <div class="profile_link">
+                        <div><a href="/supporter/{{user.id}}"><img id="thumbnail" src="./static/images/{{user.img}}" class="img-thumbnail" ></a></div>
+                        <h3 id="browse_name">{{user.first_name}} {{user.last_name}}</h3><br>
+                    </div>  
+                    {%- endfor -%}
+    
             </div>
-        </div> 
-
         {% endfor %}
 
     </div>
 </div>
+<div id="bottom_padding"></div>
 
 
 {% endblock %}

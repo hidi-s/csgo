@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3"> 
+        </div> 
+        <div class="col-md-6" id="campaign_page">     
+            <h1> Create supporter profile </h1>
+            <h1><small> Tell us more about yourself and your interests. </small></h1><br> 
+            <form method="POST" enctype=multipart/form-data action="{{url_for('post_create_info')}}">
+                <div class="form-group"> 
+                    <label for="tagline">Tagline</label>
+                    <input type="text" class="form-control" name="tagline" placeholder="Tagline"><br>
+                    <label for="description">Description</label>
+                    <textarea type="text" class="form-control" name="description" placeholder="Description"></textarea><br>
+                    <label for="link">Social Media Link</label>
+                    <input type="text" class="form-control" name="link" placeholder="Social Media Link"><br>
+                    <label for="image"> Upload campaign image</label>
+                    <input type='file' accept="image/*" id="preview_btn" name=image>
+                    <img id="preview_img" target="_blank" scr="#" alt="Your image"/><br>
+                    <input type="submit" class="btn btn-primary" id="submit_button" value="Submit"><br>
+                </div> 
+            </form>
+        </div>
+        <div class="col-md-3"> 
+        </div>     
+    </div>
+</div>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                document.getElementById('preview_img').style.visibility = "visible";
+                $('#preview_img').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#preview_btn").change(function(){
+        readURL(this);
+    });
+</script>
+
+{% endblock %}

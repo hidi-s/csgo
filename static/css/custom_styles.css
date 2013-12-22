@@ -39,12 +39,7 @@ input[type="radio"] {
 	background-color: rgb(233, 233, 233);
 	padding: 15px;
 	height:340px;
-}
-
-.profile_link:after {
-	background-color: rgb(233, 233, 233);
-	padding: 15px;
-	height:340px;
+	margin-bottom: 30px;
 }
 
 #browse_name {
@@ -74,6 +69,14 @@ input[type="radio"] {
 	padding: 15px;
 }
 
+#campaign_page{
+	background-color: rgb(233, 233, 233);
+	padding: 15px;
+}
+
+#bottom_padding{
+	margin: 80px;
+}
 #navbar_custom {
 	background: black; 
 }

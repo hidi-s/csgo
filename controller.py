@@ -100,7 +100,7 @@ def authenticate():
         session['user_id'] = new_user.id
         if creator:
             return redirect(url_for("create_info"))
-        return redirect(url_for("browse"))
+        return redirect(url_for("create_supporter"))
 
     elif request.form['btn'] == "fb_login":
         fb_name = request.form.get("name")
@@ -148,6 +148,42 @@ def give_kudos(id):
             campaign.removeKudos(session['user_id'])
         model.session.commit()
     return redirect(url_for("view_profile", id=id))
+
+@app.route("/create_supporter")
+def create_supporter():
+    return render_template("create_supporter.html")
+
+@app.route("/create_supporter", methods=["POST"])
+def process_supporter():
+    user_id = session.get('user_id')
+    tagline = request.form.get("tagline")
+    description = request.form.get("description")
+    link = request.form.get("link")
+
+    model.session.add(campaign)
+    model.session.commit()
+
+    user = User.query.get(user_id)
+
+    if 'image' in request.files:
+
+        print request.files['image']
+
+        random_string = ''.join(random.sample(string.letters,5))
+        image_id = "%s.jpg" %(random_string)
+     
+        filename = images.save(request.files['image'], folder=None, name=image_id) 
+        
+        user.img = image_id
+
+    user.tagline=tagline
+    user.twitter=twitter
+    user.github=github
+    user.linkedin=linkedin
+    model.session.commit()
+
+    return redirect(url_for("browse"))
+
 
 #Create_info is a form which stores information about a user's campaign
 @app.route("/create_info")
