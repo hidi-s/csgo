@@ -9,8 +9,12 @@
             </div>
             <div id="supporter_div"> 
                 <h1>{{supporter.first_name}} {{supporter.last_name}}</h1>
-                <h2 id="supporter_tagline"><small>{{supporter.tagline}}</small></h2> 
-                <h2><small id="description">{{supporter.description}}</small></h2>
+                {% if supporter.tagline %}
+                    <h2 id="supporter_tagline"><small>{{supporter.tagline}}</small></h2>
+                {% endif %}
+                {% if supporter.description %} 
+                    <h2><small id="description">{{supporter.description}}</small></h2>
+                {% endif %}
             </div>
         </div>
 

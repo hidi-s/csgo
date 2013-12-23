@@ -2,5 +2,5 @@
 /env/*
 *.pyc
 .*.swp
-*.db
+my_app.db
 .DS_Store
