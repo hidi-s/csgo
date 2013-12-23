@@ -5,8 +5,8 @@ from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 # import config
 # import forms
-import model
-from model import User, Campaign, Supporters, Comments 
+
+from csgo.model import User, Campaign, Supporters, Comments 
 
 import os 
 import random

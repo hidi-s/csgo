@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, request, g, session, url_for, flash, send_from_directory
-from model import User, Campaign, Supporters, Comments 
+from csgo.model import User, Campaign, Supporters, Comments
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 # import forms
-import model
+import csgo.model as model
 import os 
 import random
 import string 
