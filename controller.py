@@ -5,7 +5,7 @@ from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 import config
-import forms
+import forms 
 import model
 import os 
 import random
@@ -308,6 +308,10 @@ def display_supporter(supporter_id):
     supporter = User.query.filter_by(id=supporter_id).one()
     supported = supported_list(supporter)
     return render_template("supporters.html", supporter=supporter, supported=supported)
+
+@app.route("/callback")
+def callback():
+    return "" 
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
