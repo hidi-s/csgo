@@ -276,12 +276,11 @@ def recoverPassword():
     msg = Message("Reset CS:Go Password",
         sender= ("CS:Go", "dslevi12@gmail.com"),
         recipients=[email])
-    msg.body = """Hi %s,\n
+    msg.body = """\tHi %s,\n
         Forgot your password?\n
         Please click on this link to reset it.\n
         Love,\n
         CS:Go""" % (user.first_name)
-    msg.html = 'body'
     with app.app_context():
         mail.send(msg)
     flash("Please check your inbox for instructions to reset your password.")
