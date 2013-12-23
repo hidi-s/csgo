@@ -152,14 +152,12 @@ $( "#fb_logout" ).bind( "click", function() {
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>
-
-
         <div class="container">
-            <ul>
+            <center><ul>
             {% for message in get_flashed_messages() %}
             <li id="flash_message">{{message}}</li>
             {% endfor %}
-            </ul>
+            </ul></center>
             <p>
             {% block body %}
             {% endblock %}

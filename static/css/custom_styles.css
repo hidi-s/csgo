@@ -56,6 +56,14 @@ input[type="radio"] {
 	text-align: center; 
 }
 
+#flash_message{
+	list-style: none;
+	background-color: rgb(233, 233, 233);
+	padding: 10px;
+	font-size: 17px;
+	margin-bottom: 25px;
+}
+
 #kudos_button {
 
 	width: 200px;
