@@ -7,14 +7,22 @@
         </div> 
 
         <div class="col-md-7" id="campaign_page">
-        	<h1>{{campaign.user.first_name}} {{campaign.user.last_name}}</h1> 
-        	<h1><small>{{campaign.tagline}}</small></h1><br> 
-        	<iframe width="640" height="360" src="{{campaign.video}}" frameborder="0" allowfullscreen></iframe><br> 
-        	<br> 
+        	<h1>{{campaign.user.first_name}} {{campaign.user.last_name}}</h1>
+            {% if campaign.tagine %} 
+        	   <h1><small>{{campaign.tagline}}</small></h1><br>
+            {% endif %}
+            {% if campaign.video %}
+                <iframe width="640" height="360" src="{{campaign.video}}" frameborder="0" allowfullscreen></iframe><br><br>
+            {% endif %} 
+
         	<div style = "width: 640">
-    			<p class="lead">{{campaign.description}}</p><br> 
-    			<img class="img-thumbnail" src="/static/images/{{campaign.user.img}}">
-    		</div> 
+                {% if campaign.description %}
+                    <p class="lead">{{campaign.description}}</p><br>
+                {% endif %}
+                {% if campaign.user.img %}
+                    <img class="img-thumbnail" src="/static/images/{{campaign.user.img}}">
+                {% endif %}
+    		</div>
     	</div>
 
         <div class="col-md-1" >     
@@ -56,6 +64,18 @@
 
         var time = {{campaign.time_remaining(now) | tojson | safe}};
         document.getElementById('remaining_time').innerHTML = time;
+
+        // $("#kudos_form").submit(function(e) {
+        //     e.preventDefault();
+        //     $.post($('#kudos_form').attr('action'), $('#kudos_form').serialize(), function(data) {
+        //         if ({{user_id | tojson | safe}}) {
+        //             if ({{campaign.hasKudosed(user_id) | tojson | safe}}) {
+        //                 document.getElementById('kudos_button').value = "Un-Kudos";
+        //                 document.getElementById('kudos_value').value = "Un-Kudos";
+        //             }
+        //         }
+        //     });
+        // });
 
     });
 

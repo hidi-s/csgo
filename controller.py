@@ -84,16 +84,23 @@ def authenticate():
         return redirect(request.args.get("next", url_for("browse")))
 
     elif request.form['btn'] == "register": 
-        password = request.form.get("password")
         email = request.form.get("email")
+        if User.query.filter_by(email=email).all():
+            flash("User email already exists")         
+            return render_template("login.html")
         first_name=request.form.get("first_name")
         last_name=request.form.get("last_name")
-        new_user = User(email=email)
-        new_user.set_password(password=password)
-        new_user.first_name=first_name
-        new_user.last_name=last_name
         creator = bool(request.form.get("role"))
-        new_user.campaignCreator=creator
+        if not first_name or not last_name:
+            flash("Please enter information in all fields")
+            return render_template("login.html")
+        password = request.form.get("password")
+        verify_password = request.form.get("verify")
+        if password != verify_password:
+            flash("Passwords do not match")
+            return render_template("login.html")
+        new_user = User(email=email, first_name=first_name, last_name=last_name, campaignCreator=creator)
+        new_user.set_password(password=password)
         model.session.add(new_user)
         model.session.commit()
 
@@ -174,9 +181,10 @@ def process_supporter():
     user.description = request.form.get("description")
     user.link = request.form.get("link")
 
-    if 'image' in request.files:
+    if not request.form.get("image"):
+        user.img = "default.jpg"
 
-        print request.files['image']
+    if 'image' in request.files:
 
         random_string = ''.join(random.sample(string.letters,5))
         image_id = "%s.jpg" %(random_string)
@@ -205,17 +213,23 @@ def post_create_info():
     video = request.form.get("video_url")
     tagline = request.form.get("tagline")
     description = request.form.get("description")
-    goal = int(request.form.get("goal"))
+    goal = request.form.get("goal")
+    if not goal or int(goal) < 0 or int(goal) > 500:
+        flash("Please enter an appropriate goal")
+        return redirect(url_for("create_info"))
     twitter = request.form.get("twitter")
     github = request.form.get("github")
     linkedin = request.form.get("linkedin")
     deadline = request.form.get("deadline")
- 
+    if not deadline:
+        flash("Please enter a date")
+        return redirect(url_for("create_info"))
+
     campaign = Campaign(
         video=video,
         user_id=user_id,
         description=description,
-        goal=goal,
+        goal=int(goal),
         deadline=datetime.strptime(deadline, "%Y-%m-%d"),
         )
 
@@ -224,10 +238,10 @@ def post_create_info():
 
     user = User.query.get(user_id)
 
+    if not request.form.get("image"):
+        user.img = "default.jpg"
+
     if 'image' in request.files:
-
-        print request.files['image']
-
         random_string = ''.join(random.sample(string.letters,5))
         image_id = "%s.jpg" %(random_string)
      

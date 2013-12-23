@@ -208,7 +208,6 @@ def seed():
 
     session.commit()
 
-    print supporter1.id, camp.id
     s1 = Supporters(user_id=supporter1.id, campaign_id=camp.id)
     session.add(s1)
 
