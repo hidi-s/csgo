@@ -5,7 +5,7 @@ from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 import config
-import forms
+import form
 import model
 import os 
 import random
@@ -95,14 +95,35 @@ def authenticate():
         return redirect(url_for("create_supporter"))
 
     elif request.form['btn'] == "fb_login":
-        fb_name = request.form.get("name")
-        if current_user.is_anonymous == False:
-            current_user.fb_id = fb_id
-            current_user.fb_img_url = "https://graph.facebook.com/%s/picture?type=small" % fb_id 
-            print current_user.fb_img_url 
+        print "AJAX request data:"
+        fb_id = request.form.get('fb_id')
+        user = User.query.filter_by(fb_id=fb_id).first()
+        # If user's fb id exists in database, log in user 
+        if user: 
+            login_user(user)
+            session["user_id"] = user.id
+
+        elif current_user.is_anonymous():
+            # create an account based on their FB data
+            print "creating a new user for %s" % request.form.get('first_name')
+            #img_url = "https://graph.facebook.com/%s/picture?type=small" % fb_id 
+            #print img_url
+            user = User(
+                email=request.form.get('email'),
+                first_name=request.form.get('first_name'),
+                last_name=request.form.get('last_name'),
+                fb_id=fb_id,
+            )
+            user.set_password('python')
+            model.session.add(user)
             model.session.commit()
-            model.session.refresh()
-        return redirect(url_for("browse"))
+            session['user_id'] = new_user.id
+        elif not current_user.fb_id:
+            # make sure we already have their FB ID stored with their account
+            current_user.fb_id = fb_id
+            model.session.commit()
+
+        return ""
 
 @app.route("/")
 def index():
@@ -293,6 +314,10 @@ def display_supporter(supporter_id):
     supporter = User.query.filter_by(id=supporter_id).one()
     supported = supported_list(supporter)
     return render_template("supporters.html", supporter=supporter, supported=supported)
+
+@app.route("/callback")
+def callback():
+    return "" 
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
