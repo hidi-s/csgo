@@ -37,19 +37,20 @@
 <script type="text/javascript">
 
 $('.testing').load(function() {
-    $('.testing').each(function() {
-        var width = this.width;
-        var height = this.height;
-        console.log(width + " " + height); 
-        if (width = height) {
-            $(this).css('width', 223);
-            $(this).css('height', 223);
-        } else if (width > height) {
-            $(this).css('width', "100%");
-        } else {
-            $(this).css('height', "100%");
-        }
-    });
+    var width = this.width;
+    var height = this.height;
+    if (width == height) {
+        $(this).css('width', 223);
+        $(this).css('height', 223);
+    } else if (width > height) {
+        $(this).css('height', 223);
+        var offset = ((this.width - 223)/2);
+        $(this).css('clip', "rect(0px," + ((this.width + 223)/2) + "px,223px," + offset + 
+            "px)");
+        $(this).css('margin-left', "-" + offset);
+    } else {
+        $(this).css('height', "100%");
+    }
 });
 
 </script>
