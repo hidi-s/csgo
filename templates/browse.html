@@ -39,12 +39,13 @@ $('.testing').load(function() {
         var width = this.width;
         var height = this.height;
         console.log(width + " " + height); 
-        if (width > height) {
-            $(this).css('width', "100%");
+        if (width = height) {
+            $(this).css('width', 223);
             $(this).css('height', 223);
+        } else if (width > height) {
+            $(this).css('width', "100%");
         } else {
             $(this).css('height', "100%");
-            $(this).css('width', 223);
         }
     });
 });

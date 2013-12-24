@@ -68,6 +68,10 @@ input[type="radio"] {
 	text-align: center; 
 }
 
+#browse_name_supported {
+	width: 200px;
+}
+
 #flash_message{
 	list-style: none;
 	background-color: rgb(233, 233, 233);
