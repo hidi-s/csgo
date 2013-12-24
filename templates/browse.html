@@ -47,7 +47,10 @@ $('.testing').load(function() {
             "px)");
         $(this).css('margin-left', "-" + offset);
     } else {
-        $(this).css('height', "100%");
+        $(this).css('width', 223);
+        var offset = ((this.height - 223)/2);
+        $(this).css('clip', "rect(" + offset + "px,223px," + ((this.height + 223)/2) + "px,0px)");
+        $(this).css('margin-top', "-" + offset);
     }
 });
 
