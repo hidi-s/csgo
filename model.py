@@ -66,11 +66,14 @@ class User(Base, UserMixin):
     img = Column(String(128), default="default.jpg")
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     approved = Column(Boolean, default=False)
+    fb_id = Column(String(100), nullable=True)
+
     campaign = relationship("Campaign", uselist=False)
     kudoses = relationship("Kudoses", uselist=True)
     supporting = relationship("Supporters", uselist=True)
     campaignCreator = Column(Boolean, default=True)
     contributions = relationship("Contribution", uselist=True)
+
   
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
@@ -234,4 +237,5 @@ def seed():
 if __name__ == "__main__":
     create_tables()
     seed()
+    print "created tables"
 
