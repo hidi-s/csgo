@@ -118,6 +118,7 @@ def authenticate():
             model.session.add(user)
             model.session.commit()
             session['user_id'] = new_user.id
+            
         elif not current_user.fb_id:
             # make sure we already have their FB ID stored with their account
             current_user.fb_id = fb_id
