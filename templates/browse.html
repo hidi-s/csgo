@@ -21,7 +21,7 @@
             
     	 		{%- for user in column -%}
                 <div class="profile_link">
-        			<div><a href="/campaign/{{user.campaign.id}}"><img id="thumbnail" src="./static/images/{{user.img}}" class="img-thumbnail"></a></div>
+        			<div><a href="/campaign/{{user.campaign.id}}"><div id="thumbnail" class="img-thumbnail"><img  src="./static/images/{{user.img}}" class="testing"></div></a></div>
         			<h3 id="browse_name">{{user.first_name}} {{user.last_name}}</h3><br> 
                 </div> 
     			{%- endfor -%}
@@ -30,10 +30,26 @@
 		{% endfor %}
 	</div>
     <div id="bottom_padding"></div>
-	 
-
-
 </div>
+
+<script type="text/javascript">
+
+$('.testing').load(function() {
+    $('.testing').each(function() {
+        var width = this.width;
+        var height = this.height;
+        console.log(width + " " + height); 
+        if (width > height) {
+            $(this).css('width', "100%");
+            $(this).css('height', 223);
+        } else {
+            $(this).css('height', "100%");
+            $(this).css('width', 223);
+        }
+    });
+});
+
+</script>
 
 
 {% endblock %}

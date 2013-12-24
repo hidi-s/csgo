@@ -5,7 +5,7 @@ from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 import config
-import form
+import forms
 import model
 import os 
 import random
@@ -118,7 +118,7 @@ def authenticate():
             model.session.add(user)
             model.session.commit()
             session['user_id'] = new_user.id
-            
+
         elif not current_user.fb_id:
             # make sure we already have their FB ID stored with their account
             current_user.fb_id = fb_id

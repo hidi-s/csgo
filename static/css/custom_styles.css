@@ -4,7 +4,6 @@
 
 .img-thumbnail {
 	width: 100%;
-
 }
 
 input[type="radio"] {
@@ -19,6 +18,10 @@ input[type="radio"] {
 
 #CS{
 	color:rgb(250, 154, 11);
+}
+
+#thumbnail{
+	height:233px;
 }
 
 #Go{
@@ -47,8 +50,17 @@ input[type="radio"] {
 .profile_link {
 	background-color: rgb(233, 233, 233);
 	padding: 15px;
-	height:300px;
+	height:330px;
+	width: 100%;
 	margin-bottom: 30px;
+}
+
+.testing{
+	position:absolute;
+	width: auto;
+	height: auto;
+	
+	clip:rect(0px,223px,223px,0px);
 }
 
 #browse_name {
