@@ -233,5 +233,6 @@ def seed():
  
 if __name__ == "__main__":
     create_tables()
+    print "Seeded"
     seed()
 

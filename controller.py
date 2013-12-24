@@ -25,26 +25,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-#Testing upload functionality 
-# @app.route("/upload", methods=["POST", "GET"])
-# def upload():
-#     if request.method == "POST" and 'image' in request.files:
-#         print "saving image"
-#         filename = images.save(request.files['image'])
-#     elif request.method == "POST" :
-#         print "no image on request"
-#     else:
-#         print "render uploads"
-#         return render_template("upload.html")
-    
-#     return redirect(url_for("browse"))
-
-
-# @app.route('/uploads/<filename>')
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'],
-#                                filename)
-
 #login and logout stuff here
 @login_manager.user_loader
 def load_user(user_id):
@@ -66,9 +46,10 @@ def login():
 def authenticate():
     if request.form['btn'] == "login": 
         form_login = forms.LoginForm(request.form)
+
         if not form_login.validate():
             flash("Incorrect username or password") 
-            return render_template("create_info")
+            return render_template("login.html")
 
         email = form_login.email.data
         password = form_login.password.data
@@ -83,7 +64,11 @@ def authenticate():
         session["user_id"] = user.id
         return redirect(request.args.get("next", url_for("browse")))
 
-    elif request.form['btn'] == "register": 
+    elif request.form['btn'] == "register":
+        register_Form = forms.RegisterForm(request.form)
+        if not register_Form.validate():
+            flash("Invalid email")
+            return render_template("login.html")
         email = request.form.get("email")
         if User.query.filter_by(email=email).all():
             flash("User email already exists")         

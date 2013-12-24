@@ -138,7 +138,9 @@ $( "#fb_logout" ).bind( "click", function() {
       <li><a href="{{url_for("index")}}">Learn</a></li>
       <li><a href="{{url_for("browse")}}">Campaigns</a></li>
       <li><a href="{{url_for("browseSupporters")}}">Supporters</a></li>
-      <li><a href="{{url_for("create_info")}}">Create Campaign</a></li>
+      {% if current_user.campaignCreator %}
+        <li><a href="{{url_for("create_info")}}">Create Campaign</a></li>
+      {% endif %}
     </ul>
    
     <ul class="nav navbar-nav navbar-right">
