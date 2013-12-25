@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h4>Reset Password</h4>
+            <h4><small>Please enter a new password</small></h4><br>
+            <form action="/reset/{{token}}" method="post">
+                <div class="form-group">
+                    <label for="new_password">New Password</label>
+                    <input type="password" class="form-control" name="new" id="new" placeholder="New Password"><br>
+                    <label for="verify_password">Verify Password</label>
+                    <input type="password" class="form-control" name="verify" id="verify" placeholder="Verify Password"><br>
+                    <input type="submit" class="btn btn-primary" id="submit_button" value="Submit"><br>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

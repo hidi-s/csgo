@@ -11,7 +11,7 @@ import os
 import random
 import string 
 from datetime import datetime
-
+from itsdangerous import URLSafeSerializer
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -264,35 +264,6 @@ def post_create_info():
 
     return redirect(url_for("browse"))
 
-@app.route("/forgotpassword")
-def forgotPassword():
-    return render_template("recoverPassword.html")
-
-@app.route("/recovery", methods=["POST"])
-def recoverPassword():
-    email = request.form.get("email")
-    if email == "":
-        #fix flash formatting, so its centered
-        flash("Please enter email address")
-        return redirect(url_for("forgotPassword"))
-    valid = User.query.filter_by(email=email).all()
-    if not valid:
-        flash("Sorry, that email is not registered.")
-        return redirect(url_for("forgotPassword"))
-    user = valid[0]
-    msg = Message("Reset CS:Go Password",
-        sender= ("CS:Go", "dslevi12@gmail.com"),
-        recipients=[email])
-    msg.body = """\tHi %s,\n
-        Forgot your password?\n
-        Please click on this link to reset it.\n
-        Love,\n
-        CS:Go""" % (user.first_name)
-    with app.app_context():
-        mail.send(msg)
-    flash("Please check your inbox for instructions to reset your password.")
-    return redirect(url_for("login"))
-
 @app.route("/browseSupporters")
 def browseSupporters():
     supporters = User.query.filter_by(campaignCreator=False)
@@ -318,7 +289,71 @@ def display_supporter(supporter_id):
 
 @app.route("/callback")
 def callback():
-    return "" 
+    return ""
+
+@app.route("/forgotpassword")
+def forgotPassword():
+    return render_template("recoverPassword.html")
+
+def create_reset_link(user):
+    print user.id
+    l = "http://localhost:5001/reset/"
+    s = URLSafeSerializer("hacker-bees")
+    token = s.dumps(user.id)
+    print token
+    l += token
+    print l
+    return l
+
+@app.route("/recovery", methods=["POST"])
+def recoverPassword():
+    email = request.form.get("email")
+    if email == "":
+        #fix flash formatting, so its centered
+        flash("Please enter email address")
+        return redirect(url_for("forgotPassword"))
+    valid = User.query.filter_by(email=email).all()
+    if not valid:
+        flash("Sorry, that email is not registered.")
+        return redirect(url_for("forgotPassword"))
+    user = valid[0]
+    reset_link = create_reset_link(user)
+    msg = Message("Reset CS:Go Password",
+        sender= ("CS:Go", "hello.csgo@gmail.com"),
+        recipients=[email])
+    msg.html = """\tHi %s,<br><br>
+        Forgot your password? Please click on this link to reset it:<br>
+        <a href="%s">Reset CS:Go password</a><br><br>
+        Love,<br>
+        CS:Go""" % (user.first_name, reset_link)
+    with app.app_context():
+        mail.send(msg)
+    flash("Please check your inbox for instructions to reset your password.")
+    return redirect(url_for("login"))
+
+@app.route("/reset/<token>")
+def reset_password(token):
+    #check if token is expired
+    if False:
+        flash("Password reset link has expired")
+        redirect(url_for("login"))
+    return render_template("reset.html", token=token)
+
+@app.route("/reset/<token>", methods=["POST"])
+def resetting(token):
+    s = URLSafeSerializer("hacker-bees")
+    user_id = s.loads(token)
+    new = request.form.get("new")
+    verify = request.form.get("verify")
+    if new != verify:
+        flash("Passwords do not match")
+        return redirect(url_for("reset_password", token=token))
+    user = User.query.get(user_id)
+    user.set_password(new)
+    model.session.commit()
+    flash("Password reset")
+    return redirect(url_for("login"))
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
