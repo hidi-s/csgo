@@ -296,20 +296,17 @@ def forgotPassword():
     return render_template("recoverPassword.html")
 
 def create_reset_link(user):
-    print user.id
     l = "http://localhost:5001/reset/"
     s = URLSafeSerializer("hacker-bees")
     token = s.dumps(user.id)
-    print token
     l += token
-    print l
+    user.reset_time = datetime.today()
     return l
 
 @app.route("/recovery", methods=["POST"])
 def recoverPassword():
     email = request.form.get("email")
     if email == "":
-        #fix flash formatting, so its centered
         flash("Please enter email address")
         return redirect(url_for("forgotPassword"))
     valid = User.query.filter_by(email=email).all()
@@ -333,10 +330,14 @@ def recoverPassword():
 
 @app.route("/reset/<token>")
 def reset_password(token):
-    #check if token is expired
-    if False:
+    one_day = 86400
+    s = URLSafeSerializer("hacker-bees")
+    user_id = s.loads(token)
+    user = User.query.get(int(user_id))
+    expired = datetime.today() - user.reset_time
+    if expired.seconds > one_day:
         flash("Password reset link has expired")
-        redirect(url_for("login"))
+        return redirect(url_for("login"))
     return render_template("reset.html", token=token)
 
 @app.route("/reset/<token>", methods=["POST"])

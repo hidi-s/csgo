@@ -67,6 +67,7 @@ class User(Base, UserMixin):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     approved = Column(Boolean, default=False)
     fb_id = Column(String(100), nullable=True)
+    reset_time = Column(DateTime, nullable=False, default=datetime.now)
 
     campaign = relationship("Campaign", uselist=False)
     kudoses = relationship("Kudoses", uselist=True)
@@ -74,7 +75,6 @@ class User(Base, UserMixin):
     campaignCreator = Column(Boolean, default=True)
     contributions = relationship("Contribution", uselist=True)
 
-  
     def set_password(self, password):
         self.salt = bcrypt.gensalt()
         password = password.encode("utf-8")
@@ -82,6 +82,7 @@ class User(Base, UserMixin):
 
     def authenticate(self, password):
         password = password.encode("utf-8")
+        print password, type(password)
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
 class Campaign(Base):
@@ -89,7 +90,6 @@ class Campaign(Base):
     id = Column(Integer, primary_key=True)
     video = Column(String(128))
     deadline = Column(DateTime, nullable=False, default=datetime.now)
-    #Float for money/bitcoin fractions?
     goal = Column(Integer, nullable=True)
     tagline = Column(String(128), nullable=True)
     description = Column(String(128), nullable=True)
@@ -236,7 +236,6 @@ def seed():
  
 if __name__ == "__main__":
     create_tables()
-    print "Seeded"
     seed()
-    print "created tables"
+    print "Created tables"
 
