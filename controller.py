@@ -10,7 +10,7 @@ import model
 import os 
 import random
 import string 
-from datetime import datetime
+from datetime import datetime, date
 from itsdangerous import URLSafeSerializer
 
 app = Flask(__name__)
@@ -330,12 +330,11 @@ def recoverPassword():
 
 @app.route("/reset/<token>")
 def reset_password(token):
-    one_day = 86400
     s = URLSafeSerializer("hacker-bees")
     user_id = s.loads(token)
     user = User.query.get(int(user_id))
     expired = datetime.today() - user.reset_time
-    if expired.seconds > one_day:
+    if expired.days > 1:
         flash("Password reset link has expired")
         return redirect(url_for("login"))
     return render_template("reset.html", token=token)
@@ -351,7 +350,10 @@ def resetting(token):
         return redirect(url_for("reset_password", token=token))
     user = User.query.get(user_id)
     user.set_password(new)
+    user.reset_time = date(2000, 11, 24)
+
     model.session.commit()
+    print user.reset_time
     flash("Password reset")
     return redirect(url_for("login"))
 
