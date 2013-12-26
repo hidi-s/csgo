@@ -217,7 +217,10 @@ def post_create_info():
         return redirect(url_for('login'))
 
     user_id = session.get('user_id')
+    # video is the raw link from youtube 
     video = request.form.get("video_url")
+    video_link_split = video.split("=")
+    video_embed = video_link_split[1]
     tagline = request.form.get("tagline")
     description = request.form.get("description")
     goal = request.form.get("goal")
@@ -234,6 +237,7 @@ def post_create_info():
 
     campaign = Campaign(
         video=video,
+        video_embed = video_embed, 
         user_id=user_id,
         description=description,
         goal=int(goal),

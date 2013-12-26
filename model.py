@@ -93,6 +93,7 @@ class Campaign(Base):
     __tablename__ = "campaigns"
     id = Column(Integer, primary_key=True)
     video = Column(String(128))
+    video_embed = Column(String(128))
     deadline = Column(DateTime, nullable=False, default=datetime.now)
     goal = Column(Integer, nullable=True)
     tagline = Column(String(128), nullable=True)
