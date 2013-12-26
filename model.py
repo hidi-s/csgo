@@ -24,16 +24,6 @@ session = scoped_session(sessionmaker(bind=engine,
 Base = declarative_base()
 Base.query = session.query_property()
 
-class Contribution(Base):
-    __tablename__ = "contributions"
-    id = Column(Integer, primary_key=True)
-    supporter_id = Column(Integer, ForeignKey("users.id"))
-    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
-    payment_type = Column(String(64), nullable=False)
-    amount = Column(Integer, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-
-
 class Admin(Base):
     __tablename__ = "admins"
     id = Column(Integer, primary_key=True)
@@ -49,6 +39,20 @@ class Admin(Base):
     def authenticate(self, password):
         password = password.encode("utf-8")
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
+
+class Contribution(Base):
+    __tablename__ = "contributions"
+    id = Column(Integer, primary_key=True)
+    supporter_id = Column(Integer, ForeignKey("users.id"))
+    campaign_id = Column(Integer, ForeignKey("campaigns.id"))
+    # payment_type is Coinbase (btc) or Stripe (dollars)
+    payment_type = Column(String(64), nullable=False)
+    # amount is in USD 
+    amount = Column(Integer, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    order_id = Column(String(64), nullable=True)
+    total_btc = Column(Integer, nullable=True)
+    order_status = Column(String(64), nullable=True)
 
 class User(Base, UserMixin):
     __tablename__ = "users"

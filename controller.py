@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request, g, session, url_for, flash, send_from_directory
-from model import User, Campaign, Supporters, Comments 
+from model import User, Campaign, Supporters, Comments, Contribution
 from flask.ext.login import LoginManager, login_required, login_user, current_user, logout_user
 from flask.ext.markdown import Markdown
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
@@ -287,9 +287,38 @@ def display_supporter(supporter_id):
     supported = supported_list(supporter)
     return render_template("supporters.html", supporter=supporter, supported=supported)
 
-@app.route("/callback")
+@app.route("/callback", methods=["POST"])
 def callback():
+    # The request.json is sent from Coinbase to the callback url specified in the merchant settings. 
+    coinbase_req = request.json
+    order_id = coinbase_req["order"]["id"] 
+    # Order status should be "completed" unless something went wrong
+    order_status = coinbase_req["order"]["status"]
+    # total btc is in satoshis. 
+    total_btc = coinbase_req["order"]["total_btc"]["cents"]
+    currency = coinbase_req["order"]["total_btc"]["currency_iso"]
+    # total native currency in cents. I think this will always be $ for us. 
+    total_native_currency = coinbase_req["order"]["total_native"]["cents"]
+    native_currency_type = coinbase_req["order"]["total_native"]["currency_iso"]
+    # custom_id ties to the code I've put in the html button, which sends the current user id and campaign id. 
+    # If a user is not logged in, no user id would be sent, only a campaign id. 
+    custom_id= coinbase_req["order"]["custom"]
+    custom_id_split = custom_id.split(";")
+    campaign_id = custom_id_split[0] 
+    user_id = custom_id_split[1]
+
+    contribution = Contribution(
+        supporter_id=user_id, 
+        campaign_id=campaign_id, 
+        payment_type="coinbase", 
+        amount=total_native_currency, 
+        order_id=order_id, 
+        total_btc=total_btc, 
+        order_status=order_status)
+    model.session.add(contribution)
+    model.session.commit() 
     return ""
+
 
 @app.route("/forgotpassword")
 def forgotPassword():
@@ -359,4 +388,4 @@ def resetting(token):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5006)

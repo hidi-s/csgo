@@ -33,7 +33,10 @@
     		<h2 id="remaining_time"><span id="timer"></span></h2><p id="time_label">Days left to fund</p> 
     		<h2>{{campaign.numKudoses()}}</h2><p>Kudoses</p><br> 
 
- 			<a class="coinbase-button" data-code="8e3abf862758a9836c7f0e98dd5c6aca" data-button-style="custom_large" class="btn btn-lg btn-block" data-custom="USER1" href="https://coinbase.com/checkouts/8e3abf862758a9836c7f0e98dd5c6aca">Donate Bitcoins</a><br>
+            <a class="coinbase-button" data-code="3084784031a87f1ba1ed981a89d4df4b" data-custom="{{campaign.id}};{{user_id}}" data-button-style="donation_large" href="https://coinbase.com/checkouts/3084784031a87f1ba1ed981a89d4df4b">Donate Bitcoins</a>
+
+            <script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
+
             <br>
             <form method="POST" id="kudos_form" action="/campaign/{{campaign.id}}/kudos">
                 <input type="submit" class="btn btn-success btn-lg btn-block" name="kudos_button" id="kudos_button" value="Give Kudos">
@@ -47,12 +50,8 @@
 	        </div>
  		
     	</div> 
-		    
-		    
-		    <!-- Put comments here, with comme -->
-<!-- 	 
-  <script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
- -->
+
+
 <script type="text/javascript">
 
     $(document).ready(function(){
