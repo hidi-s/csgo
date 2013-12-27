@@ -43,11 +43,11 @@ class Admin(Base):
 class Contribution(Base):
     __tablename__ = "contributions"
     id = Column(Integer, primary_key=True)
-    supporter_id = Column(Integer, ForeignKey("users.id"))
+    contributer_id = Column(Integer, ForeignKey("users.id"))
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     # payment_type is Coinbase (btc) or Stripe (dollars)
     payment_type = Column(String(64), nullable=False)
-    # amount is in USD 
+    # amount is in USD, need to convert stripe in coins or use a float value 
     amount = Column(Integer, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     order_id = Column(String(64), nullable=True)
@@ -86,7 +86,6 @@ class User(Base, UserMixin):
 
     def authenticate(self, password):
         password = password.encode("utf-8")
-        print password, type(password)
         return bcrypt.hashpw(password, self.salt.encode("utf-8")) == self.password
 
 class Campaign(Base):

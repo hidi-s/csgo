@@ -6,6 +6,10 @@
 	width: 100%;
 }
 
+#d3goal{
+	margin: 10px 0px -5px 0px;
+}
+
 input[type="radio"] {
 	margin: 0px 10 15;
 }

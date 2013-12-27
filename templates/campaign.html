@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-
+<script src="/static/js/d3.v3.js" charset="utf-8"></script>
 <div class="container-fluid">
 	<div class="row">
         <div class="col-md-1" > 	
@@ -29,6 +29,7 @@
         </div>  
 
     	<div class="col-md-3" id="campaign_page">
+            <div id="d3goal"></div>
     		<h2>${{campaign.goal}}</h2><p>Goal</p> 
     		<h2 id="remaining_time"><span id="timer"></span></h2><p id="time_label">Days left to fund</p> 
     		<h2>{{campaign.numKudoses()}}</h2><p>Kudoses</p><br> 
@@ -63,6 +64,30 @@
 
         var time = {{campaign.time_remaining(now) | tojson | safe}};
         document.getElementById('remaining_time').innerHTML = time;
+
+        var total = {{campaign.goal | tojson | safe}};
+        var raised = {{raised}};
+        var achieved = 240 * (raised/total);
+
+        var goalSVG = d3.select("#d3goal")
+            .append("svg")
+            .attr("width", 240)
+            .attr("height", 30);
+
+        goalSVG.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", achieved)
+            .attr("height", 30)
+            .style("fill", "orange");
+
+        goalSVG.append("rect")
+            .attr("x", achieved)
+            .attr("y", 0)
+            .attr("width", 240 - achieved)
+            .attr("height", 30)
+            .style("fill", "white");
+
 
         // $("#kudos_form").submit(function(e) {
         //     e.preventDefault();

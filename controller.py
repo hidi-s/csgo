@@ -33,7 +33,6 @@ def load_user(user_id):
 @app.route("/logout")
 @login_required
 def logout():
-    #What does logout user do?
     logout_user()
     session.clear()
     return redirect(url_for("index"))
@@ -130,7 +129,6 @@ def authenticate():
 def index():
     return render_template("index.html")
 
-
 @app.route("/about")
 def view_about():
     return render_template("about.html")
@@ -160,7 +158,13 @@ def view_profile(id):
     else:
         user_id = None
     supporters = supporter_list(id)
-    return render_template("campaign.html", campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters)
+
+    raised = 0.0
+    if campaign.contributors:
+        for c in contributions:
+            raised += (c.amount/100)
+
+    return render_template("campaign.html", raised=raised, campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters)
 
 #Change this into an AJAX call
 @app.route("/campaign/<int:id>/kudos", methods=["POST"])
@@ -392,4 +396,4 @@ def resetting(token):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5006)
+    app.run(debug=True, port=5001)
