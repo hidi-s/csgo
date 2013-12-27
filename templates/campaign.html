@@ -88,6 +88,21 @@
             .attr("height", 30)
             .style("fill", "white");
 
+        var label_padding = 0;
+
+        if (raised > 99) {
+            label_padding = 5;
+        }
+
+        goalSVG.append("text")
+            .attr('fill','black')
+            .attr("x", 18 + label_padding)
+            .attr("y", 20)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "14px")
+            .text("$" + String(raised));
+
+
 
         // $("#kudos_form").submit(function(e) {
         //     e.preventDefault();

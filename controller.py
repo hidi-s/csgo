@@ -163,6 +163,7 @@ def view_profile(id):
     if campaign.contributors:
         for c in contributions:
             raised += (c.amount/100)
+    raised = 99
 
     return render_template("campaign.html", raised=raised, campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters)
 
