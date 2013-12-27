@@ -161,7 +161,7 @@ def view_profile(id):
 
     raised = 0.0
     if campaign.contributors:
-        contributions = campaing.contributions
+        contributions = campaign.contributors
         for c in contributions:
             raised += (c.amount/100)
 
