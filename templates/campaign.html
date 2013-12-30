@@ -38,7 +38,20 @@
 
             <script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
 
-            <br>
+
+            <form action="{{campaign.id}}/charge" method="post">
+  
+      
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="{{ key }}"
+            data-description="A Flask Charge"
+            data-amount="2500">
+    </script>
+    <label>
+        <h5 id="stripe_button">Give $25</h5>
+      </label>
+    </form>
+    <br>
             <form method="POST" id="kudos_form" action="/campaign/{{campaign.id}}/kudos">
                 <input type="submit" class="btn btn-success btn-lg btn-block" name="kudos_button" id="kudos_button" value="Give Kudos">
             </form>
