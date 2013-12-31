@@ -353,14 +353,14 @@ def recoverPassword():
         return redirect(url_for("forgotPassword"))
     user = valid[0]
     reset_link = create_reset_link(user)
-    msg = Message("Reset CS:Go Password",
-        sender= ("CS:Go", "hello.csgo@gmail.com"),
+    msg = Message("Reset HackerBees Password",
+        sender= ("HackerBees", "hello.hackerbees@gmail.com"),
         recipients=[email])
     msg.html = """\tHi %s,<br><br>
         Forgot your password? Please click on this link to reset it:<br>
-        <a href="%s">Reset CS:Go password</a><br><br>
+        <a href="%s">Reset HackerBees password</a><br><br>
         Love,<br>
-        CS:Go""" % (user.first_name, reset_link)
+        HackerBees""" % (user.first_name, reset_link)
     with app.app_context():
         mail.send(msg)
     flash("Please check your inbox for instructions to reset your password.")
@@ -395,6 +395,9 @@ def resetting(token):
     flash("Password reset")
     return redirect(url_for("login"))
 
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
