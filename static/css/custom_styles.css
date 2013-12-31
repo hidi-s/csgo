@@ -135,3 +135,7 @@ input[type="radio"] {
 	width: 220px;
 	height: 220px;
 }
+
+#stripe_button {
+	padding: 15px;
+}

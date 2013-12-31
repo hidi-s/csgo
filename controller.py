@@ -6,6 +6,7 @@ from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from flask.ext.mail import Mail, Message 
 import config
 import forms
+import stripe
 import model
 import os 
 import random
@@ -19,6 +20,14 @@ mail = Mail(app)
 
 images = UploadSet('images', IMAGES)
 configure_uploads(app, (images))
+
+stripe_keys = {
+    'secret_key': "",
+    'publishable_key': "pk_test_h4TvmaSQe8ZFYSkrCv873fRG"
+}
+
+stripe.api_key = stripe_keys['secret_key']
+
 
 # Stuff to make login easier
 login_manager = LoginManager()
@@ -165,7 +174,7 @@ def view_profile(id):
         for c in contributions:
             raised += (c.amount/100)
 
-    return render_template("campaign.html", raised=raised, campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters)
+    return render_template("campaign.html", raised=raised, campaign=campaign, now=datetime.today(), user_id=user_id, supporters=supporters, key=stripe_keys['publishable_key'])
 
 #Change this into an AJAX call
 @app.route("/campaign/<int:id>/kudos", methods=["POST"])
@@ -208,6 +217,38 @@ def process_supporter():
     model.session.commit()
 
     return redirect(url_for("browse"))
+
+@app.route('/campaign/<int:id>/charge', methods=['POST'])
+def charge(id):
+    campaign = Campaign.query.get(id)
+    user_id = session.get('user_id')
+    print campaign 
+    print campaign.id  
+    amount = 2500
+    customer = stripe.Customer.create(
+        email='customer@example.com',
+        card=request.form['stripeToken']
+    )
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description='Flask Charge'
+    )
+
+    
+
+    contribution = Contribution(
+        contributer_id=user_id, 
+        campaign_id=campaign.id, 
+        payment_type="stripe", 
+        amount=amount
+        )
+    model.session.add(contribution) 
+    model.session.commit()
+
+    return render_template('charge.html', amount=amount)
 
 
 #Create_info is a form which stores information about a user's campaign
@@ -317,7 +358,7 @@ def callback():
     user_id = custom_id_split[1]
 
     contribution = Contribution(
-        supporter_id=user_id, 
+        contributer_id=user_id, 
         campaign_id=campaign_id, 
         payment_type="coinbase", 
         amount=total_native_currency, 
@@ -398,6 +439,8 @@ def resetting(token):
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
