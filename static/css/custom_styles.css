@@ -20,6 +20,11 @@ input[type="radio"] {
 	width: 400px;
 }
 
+#email{
+	color:orange;
+	margin-left: 5px;
+}
+
 #CS{
 	color:rgb(250, 154, 11);
 }
